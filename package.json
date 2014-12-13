@@ -1,13 +1,14 @@
 {
-    "name"         : "node-red-samplenode",
+    "name"         : "node-red-lightblue-bean",
     "version"      : "0.0.1",
-    "description"  : "A sample node for node-red",
+    "description"  : "LightBlue Bean node for node-red",
     "dependencies": {
+        "ble-bean" : "latest"
     },
     "keywords": [ "node-red" ],
     "node-red"     : {
         "nodes": {
-            "sample": "sample/sample.js"
+            "bean": "bean/bean.js"
         }
     }
 }
