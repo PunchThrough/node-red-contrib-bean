@@ -1,0 +1,13 @@
+{
+    "name"         : "node-red-samplenode",
+    "version"      : "0.0.1",
+    "description"  : "A sample node for node-red",
+    "dependencies": {
+    },
+    "keywords": [ "node-red" ],
+    "node-red"     : {
+        "nodes": {
+            "sample": "sample/sample.js"
+        }
+    }
+}
