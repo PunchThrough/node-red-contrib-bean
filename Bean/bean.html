@@ -21,7 +21,7 @@
 
 <!-- First, the content of the edit dialog is defined.                       -->
 
-<script type="text/x-red" data-template-name="sample">
+<script type="text/x-red" data-template-name="bean">
    <!-- data-template-name identifies the node type this is for              -->
 
    <!-- Each of the following divs creates a field in the edit dialog.       -->
@@ -45,7 +45,7 @@
 
 
 <!-- Next, some simple help text is provided for the node.                   -->
-<script type="text/x-red" data-help-name="sample">
+<script type="text/x-red" data-help-name="bean">
    <!-- data-help-name identifies the node type this help is for             -->
    <!-- This content appears in the Info sidebar when a node is selected     -->
    <!-- The first <p> is used as the pop-up tool tip when hovering over a    -->
@@ -59,7 +59,7 @@
 <!-- Finally, the node type is registered along with all of its properties   -->
 <!-- The example below shows a small subset of the properties that can be set-->
 <script type="text/javascript">
-    RED.nodes.registerType('sample',{
+    RED.nodes.registerType('bean',{
         category: 'input',      // the palette category
         defaults: {             // defines the editable properties of the node
             name: {value:""},   //  along with default values.
@@ -67,10 +67,11 @@
         },
         inputs:1,               // set the number of inputs - only 0 or 1
         outputs:1,              // set the number of outputs - 0 to n
+        color: "#3FADB5",
         // set the icon (held in icons dir below where you save the node)
-        icon: "myicon.png",     // saved in  icons/myicon.png
+        icon: "bridge-dash.png",     // saved in  icons/myicon.png
         label: function() {     // sets the default label contents
-            return this.name||this.topic||"sample";
+            return this.name||this.topic||"bean";
         },
         labelStyle: function() { // sets the class to apply to the label
             return this.name?"node_label_italic":"";
