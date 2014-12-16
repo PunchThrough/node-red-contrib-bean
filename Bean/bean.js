@@ -23,11 +23,28 @@ module.exports = function(RED) {
     "use strict";
     // require any external libraries we may need....
     //var foo = require("foo-library");
+  //  var beanAPI = require('ble-bean');
 
     // The main node definition - most things happen in here
-    function SampleNode(n) {
+    function BeanNode(n) {
         // Create a RED node
         RED.nodes.createNode(this,n);
+        console.log("Do we ever get here?")
+        // Store local copies of the node configuration (as defined in the .html)
+        this.name = n.name;
+        this.test = "Test";
+    }
+
+    // Register the node by name. This must be called before overriding any of the
+    // Node functions.
+    RED.nodes.registerType("bean",BeanNode);
+
+
+
+    function BeanSerialNode(n) {
+        // Create a RED node
+        RED.nodes.createNode(this,n);
+        console.log("Do we ever get here?2")
 
         // Store local copies of the node configuration (as defined in the .html)
         this.topic = n.topic;
@@ -55,10 +72,16 @@ module.exports = function(RED) {
             // Allows ports to be closed, connections dropped etc.
             // eg: this.client.disconnect();
         });
+
+         this.status({
+            fill:"red",
+            shape:"ring",
+            text:"disconnected"
+        });
     }
 
     // Register the node by name. This must be called before overriding any of the
     // Node functions.
-    RED.nodes.registerType("sample",SampleNode);
+    RED.nodes.registerType("bean serial",BeanSerialNode);
 
 }

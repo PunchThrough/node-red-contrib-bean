@@ -29,14 +29,55 @@
    <!-- The for and id attributes identify the corresponding property        -->
    <!-- (with the 'node-input-' prefix).                                     -->
    <!-- The available icon classes are defined Twitter Bootstrap glyphicons  -->
-    <div class="form-row">
-        <label for="node-input-topic"><i class="fa fa-tasks"></i> Topic</label>
-        <input type="text" id="node-input-topic" placeholder="Topic">
-    </div>
 
     <br/>
     <!-- By convention, most nodes have a 'name' property. The following div -->
     <!-- provides the necessary field. Should always be the last option      -->
+    <div class="form-row">
+        <label for="node-config-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-config-input-name" placeholder="Name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-config-input-connectiontimeout"><i class="fa fa-clock-o"></i> Connection Timeout</label>
+        <input type="text" id="node-config-input-connectiontimeout" style="width:52%;" value="60">
+        <span id="node-units">seconds</span>
+    </div>
+
+    <div class="form-row">
+        <label for="node-config-input-bin"><i class="fa fa-sign-in"></i> Data Type</label>
+        <select type="text" id="node-config-input-bin" style="width: 77%;">
+            <option value="false">ascii strings</option>
+            <option value="bin">binary buffers</option>
+        </select>
+    </div>
+</script>
+
+<!-- Finally, the node type is registered along with all of its properties   -->
+<!-- The example below shows a small subset of the properties that can be set-->
+<script type="text/javascript">
+    RED.nodes.registerType('bean',{
+        category: 'config',      // the palette category
+        defaults: {             // defines the editable properties of the node
+            name: {value:"", required:true},   //  along with default values.
+            connectiontimeout: {value:60,required:true}
+        },
+        label: function() {     // sets the default label contents
+            return this.name||"Bean";
+        },
+        labelStyle: function() { // sets the class to apply to the label
+            return this.name?"node_label_italic":"";
+        }
+    });
+</script>
+
+
+
+<script type="text/x-red" data-template-name="bean serial">
+   <div class="form-row node-input-bean">
+        <label for="node-input-bean"><i class="fa fa-random"></i> Bean</label>
+        <input type="text" id="node-input-bean">
+    </div>
     <div class="form-row">
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name" placeholder="Name">
@@ -45,7 +86,7 @@
 
 
 <!-- Next, some simple help text is provided for the node.                   -->
-<script type="text/x-red" data-help-name="bean">
+<script type="text/x-red" data-help-name="bean serial">
    <!-- data-help-name identifies the node type this help is for             -->
    <!-- This content appears in the Info sidebar when a node is selected     -->
    <!-- The first <p> is used as the pop-up tool tip when hovering over a    -->
@@ -59,19 +100,20 @@
 <!-- Finally, the node type is registered along with all of its properties   -->
 <!-- The example below shows a small subset of the properties that can be set-->
 <script type="text/javascript">
-    RED.nodes.registerType('bean',{
+    RED.nodes.registerType('bean serial',{
         category: 'input',      // the palette category
         defaults: {             // defines the editable properties of the node
-            name: {value:""},   //  along with default values.
-            topic: {value:"", required:true}
+            name: {name:""},
+            bean: {type:"bean",required:true}   //  along with default values.
         },
         inputs:1,               // set the number of inputs - only 0 or 1
         outputs:1,              // set the number of outputs - 0 to n
         color: "#3FADB5",
         // set the icon (held in icons dir below where you save the node)
-        icon: "bridge-dash.png",     // saved in  icons/myicon.png
+        icon: "serial.png",     // saved in  icons/myicon.png
         label: function() {     // sets the default label contents
-            return this.name||this.topic||"bean";
+            var beanNode = RED.nodes.node(this.bean);
+            return this.name||((beanNode?beanNode.label():"Bean") + " serial");
         },
         labelStyle: function() { // sets the class to apply to the label
             return this.name?"node_label_italic":"";
