@@ -29,7 +29,7 @@ module.exports = function(RED) {
     function BeanNode(n) {
         // Create a RED node
         RED.nodes.createNode(this,n);
-        console.log("Do we ever get here?")
+        console.log(n)
         // Store local copies of the node configuration (as defined in the .html)
         this.name = n.name;
         this.test = "Test";
@@ -44,7 +44,6 @@ module.exports = function(RED) {
     function BeanSerialNode(n) {
         // Create a RED node
         RED.nodes.createNode(this,n);
-        console.log("Do we ever get here?2")
 
         // Store local copies of the node configuration (as defined in the .html)
         this.topic = n.topic;

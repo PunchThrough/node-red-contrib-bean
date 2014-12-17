@@ -39,7 +39,15 @@
     </div>
 
     <div class="form-row">
-        <label for="node-config-input-connectiontimeout"><i class="fa fa-clock-o"></i> Connection Timeout</label>
+        <label for="node-config-input-connectiontype"><i class="fa fa-clock-o"></i> Connection</label>
+        <select type="text" id="node-config-input-connectiontype" style="width:77%;">
+            <option value="timeout">connection on event</option>
+            <option value="constant">constantly connected</option>
+        </select>
+    </div>
+
+    <div class="form-row"  id="node-config-connectiontimeout">
+        <label for="node-config-input-connectiontimeout"><i class="fa fa-clock-o"></i> Timeout</label>
         <input type="text" id="node-config-input-connectiontimeout" style="width:52%;" value="60">
         <span id="node-units">seconds</span>
     </div>
@@ -51,6 +59,26 @@
             <option value="bin">binary buffers</option>
         </select>
     </div>
+
+    <div class="form-tips" id="tip-timeout">Tip: the "connnection on event" setting is used when the Bean should only be connected to when a message is sent to it. The Bean will disconnect after "timeout" seconds of innactivity.</div>
+
+    <script>
+        var previous = null;
+        $("#node-config-input-connectiontype").on('focus', function () { previous = this.value; }).change(function() {
+            if (previous == null) { previous = $("#node-config-input-connectiontype").val(); }
+            if ($("#node-config-input-connectiontype").val() == "timeout") {
+                // TODO: For some reason the previous functionality isn't working and this control isn't being reset to 60
+                if (previous != "timeout") { $("#node-config-input-connectiontimeout").val("60"); }
+                $("#node-config-connectiontimeout").show();
+                $("#tip-timeout").show();
+            }
+            else {
+                if (previous != "constant") { $("#node-config-input-connectiontimeout").val("0"); }
+                $("#node-config-connectiontimeout").hide();
+                $("#tip-timeout").hide();
+            }
+        });
+    </script>
 </script>
 
 <!-- Finally, the node type is registered along with all of its properties   -->
@@ -60,7 +88,9 @@
         category: 'config',      // the palette category
         defaults: {             // defines the editable properties of the node
             name: {value:"", required:true},   //  along with default values.
-            connectiontimeout: {value:60,required:true}
+            connectiontype: {required:true},
+            connectiontimeout: {value:"60",required:true},
+            bin: {value:"false",required:true}
         },
         label: function() {     // sets the default label contents
             return this.name||"Bean";
