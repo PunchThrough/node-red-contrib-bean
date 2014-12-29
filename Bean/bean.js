@@ -20,10 +20,10 @@
 
 
 module.exports = function(RED) {
-    "use strict";
+   // "use strict";
     // require any external libraries we may need....
     //var foo = require("foo-library");
-  //  var beanAPI = require('ble-bean');
+    var bleBean = require("ble-bean");
 
     // The main node definition - most things happen in here
     function BeanNode(n) {
@@ -32,12 +32,25 @@ module.exports = function(RED) {
         console.log(n)
         // Store local copies of the node configuration (as defined in the .html)
         this.name = n.name;
-        this.test = "Test";
+
+        bleBean.discover(function(bean) {
+            console.log("We found a Bean with name: \"" + bean._peripheral.advertisement.localName + "\"");
+            console.log(bean);
+            if (bean._peripheral.advertisement.localName == this.name || bean._peripheral.uuid == this.uuid){
+                console.log("We found a desired Bean with name \"" + this.name + "\"");
+                this.bean = bean;
+                this.bean.connectAndSetup(function(){
+                    console.log("We connected to the Bean with name \"" + this.name + "\"");
+                }.bind(this))
+            }
+        }.bind(this))
     }
 
     // Register the node by name. This must be called before overriding any of the
     // Node functions.
     RED.nodes.registerType("bean",BeanNode);
+
+
 
 
 
@@ -47,6 +60,8 @@ module.exports = function(RED) {
 
         // Store local copies of the node configuration (as defined in the .html)
         this.topic = n.topic;
+        this.bean = n.bean
+        this.beanConfig = RED.nodes.getNode(this.bean);
 
         // Do whatever you need to do in here - declare callbacks etc
         // Note: this sample doesn't do anything much - it will only send
@@ -61,9 +76,19 @@ module.exports = function(RED) {
 
         // respond to inputs....
         this.on('input', function (msg) {
-            node.warn("I saw a payload: "+msg.payload);
+            console.log("I saw a payload: "+msg.payload);
             // in this example just send it straight on... should process it here really
-            this.send(msg);
+            //this.send(msg);
+            if(this.beanConfig){
+                console.log(this.beanConfig.bean)
+                if(this.beanConfig.bean
+                    && this.beanConfig.bean._peripheral.state == 'connected'){
+                    console.log("Sending this value: " + parseInt(msg.payload))
+                    this.beanConfig.bean.setColor(new Buffer([parseInt(msg.payload),0,0]), function(){
+                        console.log("led color sent");
+                    });
+                }
+            }
         });
 
         this.on("close", function() {
@@ -72,7 +97,8 @@ module.exports = function(RED) {
             // eg: this.client.disconnect();
         });
 
-         this.status({
+        // TODO: modify ble-bean module to add emitters that notify when a bean is connected/disconnected 
+        this.status({
             fill:"red",
             shape:"ring",
             text:"disconnected"

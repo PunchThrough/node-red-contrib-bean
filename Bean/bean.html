@@ -39,6 +39,11 @@
     </div>
 
     <div class="form-row">
+        <label for="node-config-input-uuid"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-config-input-uuid" placeholder="UUID">
+    </div>
+
+    <div class="form-row">
         <label for="node-config-input-connectiontype"><i class="fa fa-clock-o"></i> Connection</label>
         <select type="text" id="node-config-input-connectiontype" style="width:77%;">
             <option value="timeout">connection on event</option>
@@ -88,6 +93,7 @@
         category: 'config',      // the palette category
         defaults: {             // defines the editable properties of the node
             name: {value:"", required:true},   //  along with default values.
+            uuid: {value:""},
             connectiontype: {required:true},
             connectiontimeout: {value:"60",required:true},
             bin: {value:"false",required:true}
