@@ -51,7 +51,59 @@ module.exports = function(RED) {
     RED.nodes.registerType("bean",BeanNode);
 
 
+    function BeanLedNode(n) {
+        RED.nodes.createNode(this,n);
 
+        this.topic = n.topic;
+        this.bean = n.bean
+        this.beanConfig = RED.nodes.getNode(this.bean);
+
+        // respond to inputs....
+        this.on('input', function (msg) {
+            var rgbValues = msg.payload.split(",");
+            // Convert from strings to integers, and check range
+            var outOfRange = false;
+            for(var i=0; i<rgbValues.length; i++) { 
+                rgbValues[i] = parseInt(rgbValues[i]); 
+                if(rgbValues[i] < 0 || rgbValues[i] > 255){
+                    outOfRange = true;
+                }
+            } 
+
+            // Display a warning if the input is invalid
+            if(rgbValues.length != 3
+                || outOfRange === true){
+                this.warn("Invalid input to the LED Bean node. Please use three comma separated integers (0-255) as an input. For example: \"0,128,255\"");
+                return;
+            }
+
+            if(this.beanConfig){
+                console.log(this.beanConfig.bean)
+                if(this.beanConfig.bean
+                    && this.beanConfig.bean._peripheral.state == 'connected'){
+                    this.beanConfig.bean.setColor(new Buffer(rgbValues), function(){
+                        console.log("led color sent");
+                    });
+                }
+            }
+        });
+
+        this.on("close", function() {
+            // Called when the node is shutdown - eg on redeploy.
+            // Allows ports to be closed, connections dropped etc.
+            // eg: this.client.disconnect();
+        });
+
+        // TODO: modify ble-bean module to add emitters that notify when a bean is connected/disconnected 
+        this.status({
+            fill:"red",
+            shape:"ring",
+            text:"disconnected"
+        });
+
+    }
+
+    RED.nodes.registerType("bean led",BeanLedNode);
 
 
     function BeanSerialNode(n) {
@@ -83,9 +135,9 @@ module.exports = function(RED) {
                 console.log(this.beanConfig.bean)
                 if(this.beanConfig.bean
                     && this.beanConfig.bean._peripheral.state == 'connected'){
-                    console.log("Sending this value: " + parseInt(msg.payload))
-                    this.beanConfig.bean.setColor(new Buffer([parseInt(msg.payload),0,0]), function(){
-                        console.log("led color sent");
+                    console.log("Sending this string: " + msg.payload)
+                    this.beanConfig.bean.write(new Buffer(msg.payload), function(){
+                        console.log("serial data sent");
                     });
                 }
             }
