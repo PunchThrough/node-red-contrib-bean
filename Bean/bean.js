@@ -43,19 +43,20 @@ module.exports = function(RED) {
 
 
         var attemptConnection = function(){
+            // TODO: review how this works. Will it still work reliably when multiple nodes are changing this class property?
+            // Scan for a Bean with either the same name or UUID
+            bleBean.is = function(peripheral){
+                return ( peripheral.advertisement.localName === this.name 
+                        || peripheral.uuid === this.uuid );
+            }.bind(this);
             bleBean.discover(function(bean) {
-                console.log("We found a Bean with name: \"" + bean._peripheral.advertisement.localName + "\"" );
-                console.log(bean);
-                if ( bean._peripheral.advertisement.localName === this.name 
-                    || bean._peripheral.uuid === this.uuid){
-                    console.log("We found a desired Bean \"" + this.name + "\"");
-                    this.device = bean;
-                    this.device.connectAndSetup(function(){
-                        console.log("We connected to the Bean with name \"" + this.name + "\"");
-                        this.device.on('disconnect',beanHasDisconnected);
-                        this.emit("connected");
-                    }.bind(this))
-                }
+                console.log("We found a desired Bean \"" + this.name + "\"");
+                this.device = bean;
+                this.device.connectAndSetup(function(){
+                    console.log("We connected to the Bean with name \"" + this.name + "\"");
+                    this.device.on('disconnect',beanHasDisconnected);
+                    this.emit("connected");
+                }.bind(this))
             }.bind(this))
         }.bind(this)
 
