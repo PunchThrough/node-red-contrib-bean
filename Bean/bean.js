@@ -34,6 +34,9 @@ module.exports = function(RED) {
         console.log(n)
         // Store local copies of the node configuration (as defined in the .html)
         this.name = n.name;
+        this.uuid = n.uuid;
+        this.connectiontype = n.connectiontype;
+        this.connectiontimeout  = n.connectiontimeout;
 
         console.log(this);
 
@@ -156,17 +159,17 @@ module.exports = function(RED) {
         this.topic = n.topic;
         this.bean = n.bean
         this.beanConfig = RED.nodes.getNode(this.bean);
+        this.bin = n.bin;
+        this.newline = n.newline;
+        this.addchar = n.addchar;
+        this.out = n.out;
 
-        // Do whatever you need to do in here - declare callbacks etc
-        // Note: this sample doesn't do anything much - it will only send
-        // this message once at startup...
-        // Look at other real nodes for some better ideas of what to do....
-        var msg = {};
-        msg.topic = this.topic;
-        msg.payload = "Hello world !"
+        this.splitChar = this.newline.replace("\\n","\n").replace("\\r","\r").replace("\\t","\t").replace("\\e","\e").replace("\\f","\f").replace("\\0","\0").charCodeAt(0);
 
-        // send out the message to the rest of the workspace.
-        this.send(msg);
+        this.rxBuffer = new Buffer(256);
+
+        console.log(this)
+        console.log(this.splitChar)
 
         // respond to inputs....
         this.on('input', function (msg) {
@@ -191,6 +194,65 @@ module.exports = function(RED) {
             // eg: this.client.disconnect();
         });
 
+        var attemptToPopCharSeparatedMessage = function(){
+            var i = 0;
+            while(i < this.rxBuffer.length){
+                // Scan for separation characters
+                if(this.rxBuffer[i] === this.splitChar){
+                    var outputBuf;
+                    // Include the message separation character?
+                    outputBuf = this.rxBuffer.slice(0,(this.addchar ? i+1 : i));
+                    var msg = {};
+                    msg.topic = "serial";
+                    msg.payload = (this.bin === true ? outputBuf : outputBuf.toString());
+                    this.send(msg);
+
+                    this.rxBuffer = this.rxBuffer.slice(i+1);
+                    return true;
+                }
+                i++;
+            }
+            // No messages to send in the buffer
+            return false;
+        }.bind(this)
+
+        var attemptToPopLengthSeparatedMessage = function(){
+            if(this.rxBuffer.length < this.newline) { return false; }
+
+            outputBuf = this.rxBuffer.slice(0,this.newline);
+            var msg = {};
+            msg.topic = "serial";
+            msg.payload = (this.bin === true ? outputBuf : outputBuf.toString());
+            this.send(msg);
+
+            this.rxBuffer = this.rxBuffer.slice(this.newline);
+            return true;
+        }.bind(this)
+
+
+        var serialDataRxFromBean = function(data, valid){
+            console.log(data);
+            if(valid === false) return;
+
+            // Push new data to the buffer
+            this.rxBuffer = Buffer.concat([this.rxBuffer,data]);
+
+            switch(this.out) {
+                case 'char':
+                    while(attemptToPopCharSeparatedMessage());
+                    break;
+                case 'time':
+                    // TODO
+                    break;
+                case 'count':
+                    while(attemptToPopLengthSeparatedMessage());
+                    break;
+                default:
+                    
+            }
+
+        }.bind(this);
+
         var setStatusDisconnected = function(){
             this.status({
                 fill:"red",
@@ -209,6 +271,7 @@ module.exports = function(RED) {
 
         this.beanConfig.on("connected", function() {
             setStatusConnected();
+            this.beanConfig.device.on('serial',serialDataRxFromBean);
         }.bind(this));
 
         this.beanConfig.on("disconnected", function() {
