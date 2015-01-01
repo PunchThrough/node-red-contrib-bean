@@ -24,26 +24,51 @@ module.exports = function(RED) {
     // require any external libraries we may need....
     //var foo = require("foo-library");
     var bleBean = require("ble-bean");
+    var events = require('events');
 
     // The main node definition - most things happen in here
     function BeanNode(n) {
         // Create a RED node
         RED.nodes.createNode(this,n);
+        events.EventEmitter.call(this);
         console.log(n)
         // Store local copies of the node configuration (as defined in the .html)
         this.name = n.name;
 
-        bleBean.discover(function(bean) {
-            console.log("We found a Bean with name: \"" + bean._peripheral.advertisement.localName + "\"");
-            console.log(bean);
-            if (bean._peripheral.advertisement.localName == this.name || bean._peripheral.uuid == this.uuid){
-                console.log("We found a desired Bean with name \"" + this.name + "\"");
-                this.bean = bean;
-                this.bean.connectAndSetup(function(){
-                    console.log("We connected to the Bean with name \"" + this.name + "\"");
-                }.bind(this))
+        console.log(this);
+
+        var beanHasDisconnected = function (){
+            this.emit("disconnected");
+        }.bind(this)
+
+
+        var attemptConnection = function(){
+            bleBean.discover(function(bean) {
+                console.log("We found a Bean with name: \"" + bean._peripheral.advertisement.localName + "\"" );
+                console.log(bean);
+                if ( bean._peripheral.advertisement.localName === this.name 
+                    || bean._peripheral.uuid === this.uuid){
+                    console.log("We found a desired Bean \"" + this.name + "\"");
+                    this.device = bean;
+                    this.device.connectAndSetup(function(){
+                        console.log("We connected to the Bean with name \"" + this.name + "\"");
+                        this.device.on('disconnect',beanHasDisconnected);
+                        this.emit("connected");
+                    }.bind(this))
+                }
+            }.bind(this))
+        }.bind(this)
+
+        this.isConnected = function (){
+            if(this.device
+                && this.device._peripheral.state == 'connected'){
+                return true;
+            }else{
+                return false;
             }
-        }.bind(this))
+        }
+
+        attemptConnection();
     }
 
     // Register the node by name. This must be called before overriding any of the
@@ -77,14 +102,12 @@ module.exports = function(RED) {
                 return;
             }
 
-            if(this.beanConfig){
-                console.log(this.beanConfig.bean)
-                if(this.beanConfig.bean
-                    && this.beanConfig.bean._peripheral.state == 'connected'){
-                    this.beanConfig.bean.setColor(new Buffer(rgbValues), function(){
-                        console.log("led color sent");
-                    });
-                }
+            if(this.beanConfig
+                && this.beanConfig.isConnected){
+                console.log(this.beanConfig.device)
+                this.beanConfig.device.setColor(new Buffer(rgbValues), function(){
+                    console.log("led color sent");
+                });
             }
         });
 
@@ -94,12 +117,30 @@ module.exports = function(RED) {
             // eg: this.client.disconnect();
         });
 
-        // TODO: modify ble-bean module to add emitters that notify when a bean is connected/disconnected 
-        this.status({
-            fill:"red",
-            shape:"ring",
-            text:"disconnected"
-        });
+
+        var setStatusDisconnected = function(){
+            this.status({
+                fill:"red",
+                shape:"ring",
+                text:"disconnected"
+            });
+        }.bind(this)();
+
+        var setStatusConnected = function(){
+            this.status({
+                fill:"green",
+                shape:"dot",
+                text:"connected"
+            });
+        }.bind(this);
+
+        this.beanConfig.on("connected", function() {
+            setStatusConnected();
+        }.bind(this));
+
+        this.beanConfig.on("disconnected", function() {
+            setStatusDisconnected();
+        }.bind(this));
 
     }
 
@@ -149,12 +190,29 @@ module.exports = function(RED) {
             // eg: this.client.disconnect();
         });
 
-        // TODO: modify ble-bean module to add emitters that notify when a bean is connected/disconnected 
-        this.status({
-            fill:"red",
-            shape:"ring",
-            text:"disconnected"
-        });
+        var setStatusDisconnected = function(){
+            this.status({
+                fill:"red",
+                shape:"ring",
+                text:"disconnected"
+            });
+        }.bind(this)();
+
+        var setStatusConnected = function(){
+            this.status({
+                fill:"green",
+                shape:"dot",
+                text:"connected"
+            });
+        }.bind(this);
+
+        this.beanConfig.on("connected", function() {
+            setStatusConnected();
+        }.bind(this));
+
+        this.beanConfig.on("disconnected", function() {
+            setStatusDisconnected();
+        }.bind(this));
     }
 
     // Register the node by name. This must be called before overriding any of the
