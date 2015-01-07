@@ -1,5 +1,5 @@
 <!--
-  Copyright 2014 IBM Corp.
+  Copyright 2014 Punch Throguh Design.
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -14,22 +14,7 @@
   limitations under the License.
 -->
 
-<!-- Sample html file that corresponds to the 99-sample.js file              -->
-<!-- This creates and configures the onscreen elements of the node           -->
-
-<!-- If you use this as a template, update the copyright with your own name. -->
-
-<!-- First, the content of the edit dialog is defined.                       -->
-
 <script type="text/x-red" data-template-name="bean">
-   <!-- data-template-name identifies the node type this is for              -->
-
-   <!-- Each of the following divs creates a field in the edit dialog.       -->
-   <!-- Generally, there should be an input for each property of the node.   -->
-   <!-- The for and id attributes identify the corresponding property        -->
-   <!-- (with the 'node-input-' prefix).                                     -->
-   <!-- The available icon classes are defined Twitter Bootstrap glyphicons  -->
-
     <br/>
     <!-- By convention, most nodes have a 'name' property. The following div -->
     <!-- provides the necessary field. Should always be the last option      -->
@@ -78,8 +63,7 @@
     </script>
 </script>
 
-<!-- Finally, the node type is registered along with all of its properties   -->
-<!-- The example below shows a small subset of the properties that can be set-->
+
 <script type="text/javascript">
     RED.nodes.registerType('bean',{
         category: 'config',      // the palette category
@@ -91,170 +75,6 @@
         },
         label: function() {     // sets the default label contents
             return this.name||"Bean";
-        },
-        labelStyle: function() { // sets the class to apply to the label
-            return this.name?"node_label_italic":"";
-        }
-    });
-</script>
-
-
-
-<script type="text/x-red" data-template-name="bean serial">
-   <div class="form-row node-input-bean">
-        <label for="node-input-bean"><i class="fa fa-random"></i> Bean</label>
-        <input type="text" id="node-input-bean">
-    </div>
-    <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-name" placeholder="Name">
-    </div>
-
-    <div class="form-row">
-        <label for="node-input-out"><i class="fa fa-cut"></i> Split input</label>
-        <select type="text" id="node-input-out" style="width:52%;">
-            <option value="char">when character received is</option>
-            <option value="time">after a fixed timeout of</option>
-            <option value="count">a fixed number of characters</option>
-        </select>
-        <input type="text" id="node-input-newline"  style="width:50px;">
-        <span id="node-units"></span>
-    </div>
-
-    <div class="form-row">
-        <label for="node-input-bin"><i class="fa fa-sign-in"></i> and deliver</label>
-        <select type="text" id="node-input-bin" style="width: 77%;">
-            <option value="false">ascii strings</option>
-            <option value="bin">binary buffers</option>
-        </select>
-    </div>
-    <br/>
-    <div class="form-row" id="node-addchar">
-        <label for="node-input-addchar"><i class="fa fa-sign-out"></i> On output</label>
-        <select type="text" id="node-input-addchar" style="width: 77%;">
-            <option value="false">"don't add 'split' character to output messages"</option>
-            <option value="true">"add 'split' character to output messages"</option>
-        </select>
-    </div>
-
-    <div class="form-tips" id="tip-split">Tip: the "Split on" character is used to split the input into separate messages. It can also be added to every message sent out to the serial port.</div>
-    <div class="form-tips" id="tip-bin" hidden>Tip: In timeout mode timeout starts from arrival of first character.</div>
-    <script>
-        var previous = null;
-        $("#node-input-out").on('focus', function () { previous = this.value; }).change(function() {
-            if (previous == null) { previous = $("#node-input-out").val(); }
-            if ($("#node-input-out").val() == "char") {
-                if (previous != "char") { $("#node-input-newline").val("\\n"); }
-                $("#node-units").text("");
-                $("#node-addchar").show();
-                $("#tip-split").show();
-                $("#tip-bin").hide();
-            }
-            else if ($("#node-input-out").val() == "time") {
-                if (previous != "time") { $("#node-input-newline").val("0"); }
-                $("#node-units").text("ms");
-                $("#node-addchar").hide();
-                $("#node-input-addchar").val("false");
-                $("#tip-split").hide();
-                $("#tip-bin").show();
-            }
-            else {
-                if (previous != "count") { $("#node-input-newline").val("12"); }
-                $("#node-units").text("chars");
-                $("#node-addchar").hide();
-                $("#node-input-addchar").val("false");
-                $("#tip-split").hide();
-                $("#tip-bin").hide();
-            }
-        });
-
-    </script>
-
-</script>
-
-
-<!-- Next, some simple help text is provided for the node.                   -->
-<script type="text/x-red" data-help-name="bean serial">
-   <!-- data-help-name identifies the node type this help is for             -->
-   <!-- This content appears in the Info sidebar when a node is selected     -->
-   <!-- The first <p> is used as the pop-up tool tip when hovering over a    -->
-   <!-- node in the palette.                                                 -->
-   <p>Simple sample input node. Just sends a single message when it starts up.
-   This is not very useful.</p>
-   <p>Outputs an object called <b>msg</b> containing <b>msg.topic</b> and
-   <b>msg.payload</b>. msg.payload is a String.</p>
-</script>
-
-<!-- Finally, the node type is registered along with all of its properties   -->
-<!-- The example below shows a small subset of the properties that can be set-->
-<script type="text/javascript">
-    RED.nodes.registerType('bean serial',{
-        category: 'input',      // the palette category
-        defaults: {             // defines the editable properties of the node
-            name: {name:""},
-            bean: {type:"bean",required:true},   //  along with default values.
-            newline: {value:"\\n"},
-            bin: {value:""},
-            out: {value:""},
-            addchar: {value:false}
-        },
-        inputs:1,               // set the number of inputs - only 0 or 1
-        outputs:1,              // set the number of outputs - 0 to n
-        color: "#3FADB5",
-        // set the icon (held in icons dir below where you save the node)
-        icon: "serial.png",     // saved in  icons/myicon.png
-        label: function() {     // sets the default label contents
-            var beanNode = RED.nodes.node(this.bean);
-            return this.name||((beanNode?beanNode.label():"Bean") + " serial");
-        },
-        labelStyle: function() { // sets the class to apply to the label
-            return this.name?"node_label_italic":"";
-        }
-    });
-</script>
-
-
-<script type="text/x-red" data-template-name="bean led">
-   <div class="form-row node-input-bean">
-        <label for="node-input-bean"><i class="fa fa-random"></i> Bean</label>
-        <input type="text" id="node-input-bean">
-    </div>
-    <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-name" placeholder="Name">
-    </div>
-</script>
-
-
-<!-- Next, some simple help text is provided for the node.                   -->
-<script type="text/x-red" data-help-name="bean led">
-   <!-- data-help-name identifies the node type this help is for             -->
-   <!-- This content appears in the Info sidebar when a node is selected     -->
-   <!-- The first <p> is used as the pop-up tool tip when hovering over a    -->
-   <!-- node in the palette.                                                 -->
-   <p>Simple sample input node. Just sends a single message when it starts up.
-   This is not very useful.</p>
-   <p>Outputs an object called <b>msg</b> containing <b>msg.topic</b> and
-   <b>msg.payload</b>. msg.payload is a String.</p>
-</script>
-
-<!-- Finally, the node type is registered along with all of its properties   -->
-<!-- The example below shows a small subset of the properties that can be set-->
-<script type="text/javascript">
-    RED.nodes.registerType('bean led',{
-        category: 'input',      // the palette category
-        defaults: {             // defines the editable properties of the node
-            name: {name:""},
-            bean: {type:"bean",required:true}   //  along with default values.
-        },
-        inputs:1,               // set the number of inputs - only 0 or 1
-        outputs:0,              // set the number of outputs - 0 to n
-        color: "#3FADB5",
-        // set the icon (held in icons dir below where you save the node)
-        icon: "light.png",     // saved in  icons/myicon.png
-        label: function() {     // sets the default label contents
-            var beanNode = RED.nodes.node(this.bean);
-            return this.name||((beanNode?beanNode.label():"Bean") + " LED");
         },
         labelStyle: function() { // sets the class to apply to the label
             return this.name?"node_label_italic":"";
