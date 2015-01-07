@@ -40,7 +40,7 @@ module.exports = function(RED) {
 
         console.log(this);
 
-        var beanHasDisconnected = function (){
+        var hasDisconnected = function (){
             this.emit("disconnected");
         }.bind(this)
 
@@ -57,7 +57,7 @@ module.exports = function(RED) {
                 this.device = bean;
                 this.device.connectAndSetup(function(){
                     console.log("We connected to the Bean with name \"" + this.name + "\"");
-                    this.device.on('disconnect',beanHasDisconnected);
+                    this.device.on('disconnect',hasDisconnected);
                     this.emit("connected");
                 }.bind(this))
             }.bind(this))
@@ -128,7 +128,8 @@ module.exports = function(RED) {
                 shape:"ring",
                 text:"disconnected"
             });
-        }.bind(this)();
+        }.bind(this);
+        setStatusDisconnected();
 
         var setStatusConnected = function(){
             this.status({
@@ -259,7 +260,8 @@ module.exports = function(RED) {
                 shape:"ring",
                 text:"disconnected"
             });
-        }.bind(this)();
+        }.bind(this);
+        setStatusDisconnected();
 
         var setStatusConnected = function(){
             this.status({
