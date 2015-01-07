@@ -26,14 +26,12 @@ module.exports = function(RED) {
         // Create a RED node
         RED.nodes.createNode(this,n);
         events.EventEmitter.call(this);
-        console.log(n)
+
         // Store local copies of the node configuration (as defined in the .html)
         this.name = n.name;
         this.uuid = n.uuid;
         this.connectiontype = n.connectiontype;
         this.connectiontimeout  = n.connectiontimeout;
-
-        console.log(this);
 
         var hasDisconnected = function (){
             this.emit("disconnected");
@@ -47,6 +45,7 @@ module.exports = function(RED) {
                 return ( peripheral.advertisement.localName === this.name 
                         || peripheral.uuid === this.uuid );
             }.bind(this);
+
             bleBean.discover(function(bean) {
                 console.log("We found a desired Bean \"" + this.name + "\"");
                 this.device = bean;
@@ -57,6 +56,7 @@ module.exports = function(RED) {
                 }.bind(this))
             }.bind(this))
         }.bind(this)
+
 
         this.isConnected = function (){
             if(this.device
