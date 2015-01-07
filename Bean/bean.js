@@ -14,11 +14,6 @@
  * limitations under the License.
  **/
 
-// If you use this as a template, update the copyright with your own name.
-
-// Sample Node-RED node file
-
-
 module.exports = function(RED) {
    // "use strict";
     // require any external libraries we may need....

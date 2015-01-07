@@ -26,20 +26,14 @@
 </script>
 
 
-<!-- Next, some simple help text is provided for the node.                   -->
 <script type="text/x-red" data-help-name="bean led">
-   <!-- data-help-name identifies the node type this help is for             -->
-   <!-- This content appears in the Info sidebar when a node is selected     -->
-   <!-- The first <p> is used as the pop-up tool tip when hovering over a    -->
-   <!-- node in the palette.                                                 -->
    <p>Simple sample input node. Just sends a single message when it starts up.
    This is not very useful.</p>
    <p>Outputs an object called <b>msg</b> containing <b>msg.topic</b> and
    <b>msg.payload</b>. msg.payload is a String.</p>
 </script>
 
-<!-- Finally, the node type is registered along with all of its properties   -->
-<!-- The example below shows a small subset of the properties that can be set-->
+
 <script type="text/javascript">
     RED.nodes.registerType('bean led',{
         category: 'input',      // the palette category
