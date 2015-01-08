@@ -14,73 +14,177 @@
  * limitations under the License.
  **/
 
-// If you use this as a template, update the copyright with your own name.
-
-// Sample Node-RED node file
-
-
 module.exports = function(RED) {
-    "use strict";
+    // "use strict";
     // require any external libraries we may need....
     //var foo = require("foo-library");
-  //  var beanAPI = require('ble-bean');
+    var bleBean = require("ble-bean");
+    var events = require('events');
 
     // The main node definition - most things happen in here
     function BeanNode(n) {
         // Create a RED node
         RED.nodes.createNode(this,n);
-        console.log(n)
+        events.EventEmitter.call(this);
+
         // Store local copies of the node configuration (as defined in the .html)
         this.name = n.name;
-        this.test = "Test";
+        this.uuid = n.uuid;
+        this.connectiontype = n.connectiontype;
+        this.connectiontimeout  = n.connectiontimeout;
+
+        // noble-device device object for the bean
+        this.device;
+
+        // Queue of functions to perform on a connceted Bean
+        this._funqueue = [];
+
+        // Disconnection timeout
+        this._disconnectTimer;
+
+        this._isAttemptingConnection = false;
+
+        var hasDisconnected = function (){
+            console.log("We disconnected from the Bean with name \"" + this.name + "\"");
+            this.emit("disconnected");
+            if(this.connectiontype == 'constant'){
+                attemptConnection();
+            }
+        }.bind(this)
+
+        var hasConnected = function (){
+            console.log("We connected to the Bean with name \"" + this.name + "\"");
+            this.emit("connected");
+
+            // Release serial gate
+            this.device.send(new Buffer([0x05, 0x50]), new Buffer([]), function(){});
+
+            setDisconnectionTimeout(this.connectiontimeout);
+            
+            while (this._funqueue.length > 0) {
+                (this._funqueue.shift()).call(this);   
+            }
+        }.bind(this)
+
+
+
+        var attemptConnection = function(){
+            console.log("Attempting to connect to the Bean with name \"" + this.name + "\"");
+            if(this._isAttemptingConnection === true){ 
+                console.log("Already in a connection attempt to the Bean with name \"" + this.name + "\"");
+                return false; 
+            }
+            this._isAttemptingConnection = true;
+            // TODO: review how this works. Will it still work reliably when multiple nodes are changing this class property?
+            // Scan for a Bean with either the same name or UUID
+            bleBean.is = function(peripheral){
+                return ( peripheral.advertisement.localName === this.name 
+                        || peripheral.uuid === this.uuid );
+            }.bind(this);
+
+            bleBean.discover(function(bean) {
+                console.log("We found a desired Bean \"" + this.name + "\"");
+                this.device = bean;
+                this.device.connectAndSetup(function(){
+                    this.device.on('disconnect', hasDisconnected);
+                    this._isAttemptingConnection = false;
+                    hasConnected();
+                }.bind(this))
+            }.bind(this))
+
+            return true;
+        }.bind(this)
+
+
+        this.isConnected = function (){
+            if(this.device
+                && this.device._peripheral.state == 'connected'){
+                return true;
+            }else{
+                return false;
+            }
+        }
+
+        var setDisconnectionTimeout = function(seconds){
+            if(this.connectiontype == 'timeout'){
+                // Clear any previous disconnect timeout
+                if (typeof(this._disconnectTimer) === 'undefined' 
+                    || this._disconnectTimer === null)
+                {
+
+                }else{
+                    clearTimeout(this._disconnectTimer);
+                }
+                // Set the new disconnect timeout
+                this._disconnectTimer = setTimeout(function(){
+                    this.device.disconnect();
+                }.bind(this), seconds*1000);
+            }else if(this.connectiontype === 'constant'){
+
+            }
+        }.bind(this)
+
+
+        this.write = function(data, done){
+            performFunctionWhenConnected(function(){
+                this.device.write(data, done);
+            })
+        }
+
+        this.setColor = function(color,done){
+            performFunctionWhenConnected(function(){
+                this.device.setColor(color, done);
+            })
+        };
+
+        this.requestAccell = function(done){
+            performFunctionWhenConnected(function(){
+                this.device.requestAccell(done);
+            })
+        };
+
+        this.requestTemp = function(done){
+            performFunctionWhenConnected(function(){
+                this.device.requestTemp(done);
+            })
+        };
+
+        var performFunctionWhenConnected = function(aFunction){
+            setDisconnectionTimeout(this.connectiontimeout);
+
+            if(this.isConnected() === true){
+                aFunction.call(this);
+            }else{
+                attemptConnection();
+                this._funqueue.push(aFunction);
+            }
+        }.bind(this)
+        
+
+        // This is a second precaution in case the "disconnect" event isn't reached 
+        if(this.connectiontype === 'constant'){
+            // Initial connection
+            attemptConnection();
+
+            // Check connection status periodically and attempt to reconnect if disconnceted
+            this.reconnectInterval = setInterval(function(){
+                if(this.isConnected() === false){
+                    attemptConnection();
+                }else{
+                    console.log("We are currently connected to the Bean with name \"" + this.name + "\"");
+                }
+            }.bind(this), 30*1000)
+        }
+
+        this.on("close", function(done) {
+            if (this.device) {
+                this.device.disconnect();
+            } 
+        });
     }
 
     // Register the node by name. This must be called before overriding any of the
     // Node functions.
     RED.nodes.registerType("bean",BeanNode);
-
-
-
-    function BeanSerialNode(n) {
-        // Create a RED node
-        RED.nodes.createNode(this,n);
-
-        // Store local copies of the node configuration (as defined in the .html)
-        this.topic = n.topic;
-
-        // Do whatever you need to do in here - declare callbacks etc
-        // Note: this sample doesn't do anything much - it will only send
-        // this message once at startup...
-        // Look at other real nodes for some better ideas of what to do....
-        var msg = {};
-        msg.topic = this.topic;
-        msg.payload = "Hello world !"
-
-        // send out the message to the rest of the workspace.
-        this.send(msg);
-
-        // respond to inputs....
-        this.on('input', function (msg) {
-            node.warn("I saw a payload: "+msg.payload);
-            // in this example just send it straight on... should process it here really
-            this.send(msg);
-        });
-
-        this.on("close", function() {
-            // Called when the node is shutdown - eg on redeploy.
-            // Allows ports to be closed, connections dropped etc.
-            // eg: this.client.disconnect();
-        });
-
-         this.status({
-            fill:"red",
-            shape:"ring",
-            text:"disconnected"
-        });
-    }
-
-    // Register the node by name. This must be called before overriding any of the
-    // Node functions.
-    RED.nodes.registerType("bean serial",BeanSerialNode);
 
 }

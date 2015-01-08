@@ -1,5 +1,5 @@
 <!--
-  Copyright 2014 IBM Corp.
+  Copyright 2014 Punch Throguh Design.
 
   Licensed under the Apache License, Version 2.0 (the "License");
   you may not use this file except in compliance with the License.
@@ -14,28 +14,16 @@
   limitations under the License.
 -->
 
-<!-- Sample html file that corresponds to the 99-sample.js file              -->
-<!-- This creates and configures the onscreen elements of the node           -->
-
-<!-- If you use this as a template, update the copyright with your own name. -->
-
-<!-- First, the content of the edit dialog is defined.                       -->
-
 <script type="text/x-red" data-template-name="bean">
-   <!-- data-template-name identifies the node type this is for              -->
-
-   <!-- Each of the following divs creates a field in the edit dialog.       -->
-   <!-- Generally, there should be an input for each property of the node.   -->
-   <!-- The for and id attributes identify the corresponding property        -->
-   <!-- (with the 'node-input-' prefix).                                     -->
-   <!-- The available icon classes are defined Twitter Bootstrap glyphicons  -->
-
     <br/>
-    <!-- By convention, most nodes have a 'name' property. The following div -->
-    <!-- provides the necessary field. Should always be the last option      -->
     <div class="form-row">
         <label for="node-config-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-config-input-name" placeholder="Name">
+    </div>
+
+    <div class="form-row">
+        <label for="node-config-input-uuid"><i class="fa fa-tag"></i> UUID</label>
+        <input type="text" id="node-config-input-uuid" placeholder="UUID">
     </div>
 
     <div class="form-row">
@@ -50,14 +38,6 @@
         <label for="node-config-input-connectiontimeout"><i class="fa fa-clock-o"></i> Timeout</label>
         <input type="text" id="node-config-input-connectiontimeout" style="width:52%;" value="60">
         <span id="node-units">seconds</span>
-    </div>
-
-    <div class="form-row">
-        <label for="node-config-input-bin"><i class="fa fa-sign-in"></i> Data Type</label>
-        <select type="text" id="node-config-input-bin" style="width: 77%;">
-            <option value="false">ascii strings</option>
-            <option value="bin">binary buffers</option>
-        </select>
     </div>
 
     <div class="form-tips" id="tip-timeout">Tip: the "connnection on event" setting is used when the Bean should only be connected to when a message is sent to it. The Bean will disconnect after "timeout" seconds of innactivity.</div>
@@ -81,69 +61,18 @@
     </script>
 </script>
 
-<!-- Finally, the node type is registered along with all of its properties   -->
-<!-- The example below shows a small subset of the properties that can be set-->
+
 <script type="text/javascript">
     RED.nodes.registerType('bean',{
         category: 'config',      // the palette category
         defaults: {             // defines the editable properties of the node
             name: {value:"", required:true},   //  along with default values.
+            uuid: {value:""},
             connectiontype: {required:true},
-            connectiontimeout: {value:"60",required:true},
-            bin: {value:"false",required:true}
+            connectiontimeout: {value:"60",required:true}
         },
         label: function() {     // sets the default label contents
             return this.name||"Bean";
-        },
-        labelStyle: function() { // sets the class to apply to the label
-            return this.name?"node_label_italic":"";
-        }
-    });
-</script>
-
-
-
-<script type="text/x-red" data-template-name="bean serial">
-   <div class="form-row node-input-bean">
-        <label for="node-input-bean"><i class="fa fa-random"></i> Bean</label>
-        <input type="text" id="node-input-bean">
-    </div>
-    <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-input-name" placeholder="Name">
-    </div>
-</script>
-
-
-<!-- Next, some simple help text is provided for the node.                   -->
-<script type="text/x-red" data-help-name="bean serial">
-   <!-- data-help-name identifies the node type this help is for             -->
-   <!-- This content appears in the Info sidebar when a node is selected     -->
-   <!-- The first <p> is used as the pop-up tool tip when hovering over a    -->
-   <!-- node in the palette.                                                 -->
-   <p>Simple sample input node. Just sends a single message when it starts up.
-   This is not very useful.</p>
-   <p>Outputs an object called <b>msg</b> containing <b>msg.topic</b> and
-   <b>msg.payload</b>. msg.payload is a String.</p>
-</script>
-
-<!-- Finally, the node type is registered along with all of its properties   -->
-<!-- The example below shows a small subset of the properties that can be set-->
-<script type="text/javascript">
-    RED.nodes.registerType('bean serial',{
-        category: 'input',      // the palette category
-        defaults: {             // defines the editable properties of the node
-            name: {name:""},
-            bean: {type:"bean",required:true}   //  along with default values.
-        },
-        inputs:1,               // set the number of inputs - only 0 or 1
-        outputs:1,              // set the number of outputs - 0 to n
-        color: "#3FADB5",
-        // set the icon (held in icons dir below where you save the node)
-        icon: "serial.png",     // saved in  icons/myicon.png
-        label: function() {     // sets the default label contents
-            var beanNode = RED.nodes.node(this.bean);
-            return this.name||((beanNode?beanNode.label():"Bean") + " serial");
         },
         labelStyle: function() { // sets the class to apply to the label
             return this.name?"node_label_italic":"";
