@@ -25,6 +25,7 @@ module.exports = function(RED) {
     //var foo = require("foo-library");
     var bleBean = require("ble-bean");
     var events = require('events');
+    var beanNode = require('./beanNodeStatusMixin.js');
 
     function BeanLedNode(n) {
         RED.nodes.createNode(this,n);
@@ -65,31 +66,7 @@ module.exports = function(RED) {
             // eg: this.client.disconnect();
         });
 
-
-        var setStatusDisconnected = function(){
-            this.status({
-                fill:"red",
-                shape:"ring",
-                text:"disconnected"
-            });
-        }.bind(this);
-        setStatusDisconnected();
-
-        var setStatusConnected = function(){
-            this.status({
-                fill:"green",
-                shape:"dot",
-                text:"connected"
-            });
-        }.bind(this);
-
-        this.beanConfig.on("connected", function() {
-            setStatusConnected();
-        }.bind(this));
-
-        this.beanConfig.on("disconnected", function() {
-            setStatusDisconnected();
-        }.bind(this));
+        beanNode.configureBeanStatuses.call(this);
 
     }
 

@@ -27,6 +27,9 @@ module.exports = function(RED) {
         RED.nodes.createNode(this,n);
         events.EventEmitter.call(this);
 
+        // Unlimited listeners
+        this.setMaxListeners(0);
+
         // Store local copies of the node configuration (as defined in the .html)
         this.name = n.name;
         this.uuid = n.uuid;
@@ -74,6 +77,7 @@ module.exports = function(RED) {
                 console.log("Already in a connection attempt to the Bean with name \"" + this.name + "\"");
                 return false; 
             }
+
             this._isAttemptingConnection = true;
             // TODO: review how this works. Will it still work reliably when multiple nodes are changing this class property?
             // Scan for a Bean with either the same name or UUID
@@ -82,9 +86,11 @@ module.exports = function(RED) {
                         || peripheral.uuid === this.uuid );
             }.bind(this);
 
+            this.emit("searching");
             bleBean.discover(function(bean) {
                 console.log("We found a desired Bean \"" + this.name + "\"");
                 this.device = bean;
+                this.emit("connecting");
                 this.device.connectAndSetup(function(){
                     this.device.on('disconnect', hasDisconnected);
                     this._isAttemptingConnection = false;
