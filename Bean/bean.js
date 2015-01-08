@@ -27,6 +27,9 @@ module.exports = function(RED) {
         RED.nodes.createNode(this,n);
         events.EventEmitter.call(this);
 
+        // Unlimited listeners
+        this.setMaxListeners(0);
+
         // Store local copies of the node configuration (as defined in the .html)
         this.name = n.name;
         this.uuid = n.uuid;

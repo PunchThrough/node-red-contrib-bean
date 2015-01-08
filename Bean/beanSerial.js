@@ -25,10 +25,13 @@ module.exports = function(RED) {
     //var foo = require("foo-library");
     var bleBean = require("ble-bean");
     var events = require('events');
+    var beanNode = require('./beanNodeStatusMixin.js');
 
     function BeanSerialNode(n) {
         // Create a RED node
         RED.nodes.createNode(this,n);
+
+
 
         // Store local copies of the node configuration (as defined in the .html)
         this.topic = n.topic;
@@ -121,35 +124,15 @@ module.exports = function(RED) {
 
         }.bind(this);
 
-        var setStatusDisconnected = function(){
-            this.status({
-                fill:"red",
-                shape:"ring",
-                text:"disconnected"
-            });
-        }.bind(this);
-        setStatusDisconnected();
-
-        var setStatusConnected = function(){
-            this.status({
-                fill:"green",
-                shape:"dot",
-                text:"connected"
-            });
-        }.bind(this);
-
         this.beanConfig.on("connected", function() {
-            setStatusConnected();
             this.beanConfig.device.on('serial',serialDataRxFromBean);
-        }.bind(this));
-
-        this.beanConfig.on("disconnected", function() {
-            setStatusDisconnected();
         }.bind(this));
 
         this.on("close", function(done) {
             
         });
+
+        beanNode.configureBeanStatuses.call(this);
     }
 
     // Register the node by name. This must be called before overriding any of the
