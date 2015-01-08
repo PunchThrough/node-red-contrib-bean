@@ -56,6 +56,9 @@ module.exports = function(RED) {
             console.log("We connected to the Bean with name \"" + this.name + "\"");
             this.emit("connected");
 
+            // Release serial gate
+            this.device.send(new Buffer([0x05, 0x50]), new Buffer([]), function(){});
+
             setDisconnectionTimeout(this.connectiontimeout);
             
             while (this._funqueue.length > 0) {
@@ -150,7 +153,6 @@ module.exports = function(RED) {
             setDisconnectionTimeout(this.connectiontimeout);
 
             if(this.isConnected() === true){
-                console.log(this.device);
                 aFunction.call(this);
             }else{
                 attemptConnection();

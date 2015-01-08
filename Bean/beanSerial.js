@@ -41,10 +41,7 @@ module.exports = function(RED) {
 
         this.splitChar = this.newline.replace("\\n","\n").replace("\\r","\r").replace("\\t","\t").replace("\\e","\e").replace("\\f","\f").replace("\\0","\0").charCodeAt(0);
 
-        this.rxBuffer = new Buffer(256);
-
-        console.log(this)
-        console.log(this.splitChar)
+        this.rxBuffer = new Buffer(0);
 
         // respond to inputs....
         this.on('input', function (msg) {
@@ -103,7 +100,6 @@ module.exports = function(RED) {
 
 
         var serialDataRxFromBean = function(data, valid){
-            //console.log(data);
             if(valid === false) return;
 
             // Push new data to the buffer
@@ -150,6 +146,10 @@ module.exports = function(RED) {
         this.beanConfig.on("disconnected", function() {
             setStatusDisconnected();
         }.bind(this));
+
+        this.on("close", function(done) {
+            
+        });
     }
 
     // Register the node by name. This must be called before overriding any of the
