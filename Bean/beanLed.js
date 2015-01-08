@@ -52,12 +52,10 @@ module.exports = function(RED) {
                 return;
             }
 
-            if(this.beanConfig
-                && this.beanConfig.isConnected){
-                console.log(this.beanConfig.device)
-                this.beanConfig.device.setColor(new Buffer(rgbValues), function(){
+            if(this.beanConfig){
+                this.beanConfig.setColor(new Buffer(rgbValues), function(){
                     console.log("led color sent");
-                });
+                })
             }
         });
 

@@ -52,14 +52,11 @@ module.exports = function(RED) {
             // in this example just send it straight on... should process it here really
             //this.send(msg);
             if(this.beanConfig){
-                console.log(this.beanConfig.bean)
-                if(this.beanConfig.bean
-                    && this.beanConfig.bean._peripheral.state == 'connected'){
-                    console.log("Sending this string: " + msg.payload)
-                    this.beanConfig.bean.write(new Buffer(msg.payload), function(){
-                        console.log("serial data sent");
-                    });
-                }
+                console.log("Sending this string: " + msg.payload)
+                this.beanConfig.write(new Buffer(msg.payload), function(){
+                    console.log("serial data sent");
+                })
+                
             }
         });
 
@@ -106,7 +103,7 @@ module.exports = function(RED) {
 
 
         var serialDataRxFromBean = function(data, valid){
-            console.log(data);
+            //console.log(data);
             if(valid === false) return;
 
             // Push new data to the buffer
