@@ -183,9 +183,15 @@ module.exports = function(RED) {
         }
 
         this.on("close", function(done) {
-            if (this.device) {
-                this.device.disconnect();
-            } 
+            clearInterval(this.reconnectInterval);
+            if (this.isConnected()) {
+                this.device.disconnect(function(){
+                    console.log("We disconnected from the Bean with name \"" + this.name + "\"");
+                    done();
+                }.bind(this));
+            }else{
+                done();
+            }
         });
     }
 
