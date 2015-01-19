@@ -162,6 +162,9 @@ module.exports = function(RED) {
                 aFunction.call(this);
             }else{
                 attemptConnection();
+                if(this._funqueue.length > 5){
+                   this._funqueue.shift(); 
+                }
                 this._funqueue.push(aFunction);
             }
         }.bind(this)
