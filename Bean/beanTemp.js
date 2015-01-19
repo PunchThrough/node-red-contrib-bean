@@ -27,7 +27,7 @@ module.exports = function(RED) {
     var events = require('events');
     var beanNode = require('./beanNodeStatusMixin.js');
 
-    function BeanLedNode(n) {
+    function BeanTempNode(n) {
         RED.nodes.createNode(this,n);
 
         this.topic = n.topic;
@@ -69,6 +69,6 @@ module.exports = function(RED) {
         beanNode.configureBeanStatuses.call(this);
     }
 
-    RED.nodes.registerType("bean temp",BeanLedNode);
+    RED.nodes.registerType("bean temp",BeanTempNode);
 
 }

@@ -60,12 +60,6 @@ module.exports = function(RED) {
             }
         });
 
-        this.on("close", function() {
-            // Called when the node is shutdown - eg on redeploy.
-            // Allows ports to be closed, connections dropped etc.
-            // eg: this.client.disconnect();
-        });
-
         var attemptToPopCharSeparatedMessage = function(){
             var i = 0;
             while(i < this.rxBuffer.length){
@@ -129,7 +123,7 @@ module.exports = function(RED) {
         }.bind(this));
 
         this.on("close", function(done) {
-            
+            done();
         });
 
         beanNode.configureBeanStatuses.call(this);
