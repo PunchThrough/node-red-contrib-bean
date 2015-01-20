@@ -80,15 +80,10 @@ module.exports = function(RED) {
             console.log("Attempting to connect to the Bean with name \"" + this.name + "\"");
 
             this._isAttemptingConnection = true;
-            // TODO: review how this works. Will it still work reliably when multiple nodes are changing this class property?
-            // Scan for a Bean with either the same name or UUID
-            bleBean.is = function(peripheral){
-                return ( peripheral.advertisement.localName === this.name 
-                        || peripheral.uuid === this.uuid );
-            }.bind(this);
 
             this.emit("searching");
-            bleBean.discover(function(bean) {
+
+            var onDiscovery = function(bean) {
                 console.log("We found a desired Bean \"" + this.name + "\"");
                 this.device = bean;
                 this.emit("connecting");
@@ -97,7 +92,11 @@ module.exports = function(RED) {
                     this._isAttemptingConnection = false;
                     hasConnected();
                 }.bind(this))
-            }.bind(this))
+            }.bind(this)
+
+            bleBean.discoverWithFilter(function(bean) {
+                return (bean.uuid === this.uuid) || (bean.name === this.name);
+            }.bind(this), onDiscovery);
 
             return true;
         }.bind(this)
