@@ -72,11 +72,12 @@ module.exports = function(RED) {
 
 
         var attemptConnection = function(){
-            console.log("Attempting to connect to the Bean with name \"" + this.name + "\"");
             if(this._isAttemptingConnection === true){ 
-                console.log("Already in a connection attempt to the Bean with name \"" + this.name + "\"");
+                //console.log("Already in a connection attempt to the Bean with name \"" + this.name + "\"");
                 return false; 
             }
+
+            console.log("Attempting to connect to the Bean with name \"" + this.name + "\"");
 
             this._isAttemptingConnection = true;
             // TODO: review how this works. Will it still work reliably when multiple nodes are changing this class property?
@@ -177,7 +178,7 @@ module.exports = function(RED) {
                 if(this.isConnected() === false){
                     attemptConnection();
                 }else{
-                    console.log("We are currently connected to the Bean with name \"" + this.name + "\"");
+                    //console.log("We are currently connected to the Bean with name \"" + this.name + "\"");
                 }
             }.bind(this), 30*1000)
         }

@@ -54,7 +54,7 @@ module.exports = function(RED) {
             if(this.beanConfig){
                 console.log("Sending this string: " + msg.payload)
                 this.beanConfig.write(new Buffer(msg.payload), function(){
-                    console.log("serial data sent");
+                    //console.log("serial data sent");
                 })
                 
             }

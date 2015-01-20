@@ -39,7 +39,7 @@ module.exports = function(RED) {
 
             if(this.beanConfig){
                 this.beanConfig.requestTemp(function(){
-                    console.log("temperatured requested");
+                    //console.log("temperatured requested");
                 })
             }
         });

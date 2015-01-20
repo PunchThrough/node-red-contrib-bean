@@ -39,7 +39,7 @@ module.exports = function(RED) {
 
             if(this.beanConfig){
                 this.beanConfig.requestAccell(function(){
-                    console.log("Accel requested");
+                    //console.log("Accel requested");
                 })
             }
         });
