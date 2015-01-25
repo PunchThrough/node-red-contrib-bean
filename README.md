@@ -33,9 +33,14 @@ Node-Red allows for third party nodes to be made and distributed as npm modules.
 
 0.0.1 : Initial Release
 
+## Authors
+
+* Ray Kampmeier [@raykamp](https://github.com/raykamp)
+* Simone Giertz [@simsalapim](https://github.com/simsalapim)
+
 ## Credits
 
-Node-RED has been made possible by the hard work of Nick O'Leary @knolleary and Dave Conway-Jones @ceejay at IBM Emerging Technology. Much thanks to these guys and other supporters for developing this great new platform. 
+Node-RED has been made possible by the hard work of Nick O'Leary @knolleary and Dave Conway-Jones @ceejay at IBM Emerging Technology. Much thanks to them and other supporters for advancing this platform. 
 
 ## License
 
