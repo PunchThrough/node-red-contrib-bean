@@ -1,14 +1,37 @@
 {
-    "name"         : "node-red-lightblue-bean",
+    "name"         : "node-red-contrib-bean",
+    "author"       : "Ray Kampmeier - Punch Through Design",
     "version"      : "0.0.1",
-    "description"  : "LightBlue Bean node for node-red",
-    "dependencies": {
+    "description"  : "Node-red node for the LightBlue Bean",
+    "license"      : "MIT",
+    "homepage"     : "https://punchthrough.com/bean/",
+    "bugs"         : { "url" : "https://github.com/PunchThrough/node-red-contrib-bean/issues"},
+    "dependencies" : {
         "ble-bean" : "git://github.com/raykamp/ble-bean.git#712de585151450dcd536a880f93aa0360fd1ae42"
     },
-    "keywords": [ "node-red" ],
+    "repository" : { 
+        "type"  : "git",
+        "url"   : "https://github.com/PunchThrough/node-red-contrib-bean.git"
+    },
+    "keywords" : [ 
+        "node-red",
+        "LightBlue", 
+        "Bean", 
+        "Punch Through", 
+        "Punch Through Design", 
+        "Light Blue" 
+    ],
+    "contributors" : [
+        "Ray Kampmeier <raykampmeier@gmail.com> (http://raykampmeier.com/)",
+        "Simone Giertz <simone@giertz.com> (http://simonegiertz.com/)"
+    ],
     "node-red"     : {
         "nodes": {
-            "bean": "bean/bean.js"
+            "bean": "Bean/bean.js",
+            "beanAccel": "Bean/beanAccel.js",
+            "beanLed": "Bean/beanLed.js",
+            "beanSerial": "Bean/beanSerial.js",
+            "beanTemp": "Bean/beanTemp.js"
         }
     }
 }
