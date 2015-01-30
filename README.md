@@ -1,6 +1,6 @@
 # LightBlue Bean nodes for node-red
 
-Node-Red is a graphic flow-style programming environment based on node.js. The application runs as a server, and you manipulate functional "flows" from a web client. The server can be hosted on an inexpensive device like the Raspberry Pi. Flow's can be manipulated from the browser of the server device, on a separate computer client on the same network, and/or remotely over the internet.
+Node-Red is a graphic flow-style programming environment based on node.js. The application runs as a server, and you manipulate functional "flows" from a web client. The server can be hosted on an inexpensive device like the Raspberry Pi. Flows can be manipulated from the browser of the server device, on a separate computer client on the same network, and/or remotely over the internet.
 
 Node-Red allows for third party nodes to be made and distributed as npm modules. This project is set of node-red nodes that allow for easy interfacing to the LightBlue Bean.
 
@@ -12,7 +12,7 @@ Node-Red allows for third party nodes to be made and distributed as npm modules.
 1. Install Node-RED
     1. Download: https://github.com/node-red/node-red/archive/master.zip
     1. Unzip
-    1. `cd node-red`
+    1. `cd node-red-master`
     1. `npm install`
 1. Install Bean nodes: `npm install node-red-contrib-bean`
 
