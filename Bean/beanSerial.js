@@ -83,15 +83,19 @@ module.exports = function(RED) {
         }.bind(this)
 
         var attemptToPopLengthSeparatedMessage = function(){
-            if(this.rxBuffer.length < this.newline) { return false; }
+            var separationLength = parseInt(this.newline);
+            if( separationLength === NaN ||
+                this.rxBuffer.length < separationLength) { 
+                return false; 
+            }
 
-            outputBuf = this.rxBuffer.slice(0,this.newline);
+            outputBuf = this.rxBuffer.slice(0,separationLength);
             var msg = {};
             msg.topic = "serial";
             msg.payload = (this.bin === true ? outputBuf : outputBuf.toString());
             this.send(msg);
 
-            this.rxBuffer = this.rxBuffer.slice(this.newline);
+            this.rxBuffer = this.rxBuffer.slice(separationLength);
             return true;
         }.bind(this)
 
