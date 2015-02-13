@@ -27,10 +27,9 @@
 
 
 <script type="text/x-red" data-help-name="bean accel">
-   <p>Simple sample input node. Just sends a single message when it starts up.
-   This is not very useful.</p>
-   <p>Outputs an object called <b>msg</b> containing <b>msg.topic</b> and
-   <b>msg.payload</b>. msg.payload is a String.</p>
+   <p>Sending any message to this node will trigger a request to read a Bean&#39;s acceleration.</p>
+   <p>When the acceleration has been successfully read, this node outputs an object called <b>msg</b> containing a <b>msg.topic</b>,
+   <b>msg.accelX</b>, <b>msg.accelY</b>, and <b>msg.accelZ</b>. msg.topic is set to <b>"accel"</b> and the acceleration poperties are <b>fixed point numbers</b> representing acceleration in units of <b>g-force</b>.</p>
 </script>
 
 
