@@ -23,6 +23,7 @@ module.exports = function(RED) {
 
     // The main node definition - most things happen in here
     function BeanNode(n) {
+        console.log("A Bean config node is being instantiated");
         // Create a RED node
         RED.nodes.createNode(this,n);
         events.EventEmitter.call(this);
@@ -50,7 +51,8 @@ module.exports = function(RED) {
         var hasDisconnected = function (){
             console.log("We disconnected from the Bean with name \"" + this.name + "\"");
             this.emit("disconnected");
-            if(this.connectiontype == 'constant'){
+            if(this.connectiontype == 'constant' &&
+                this.isBeingDestroyed !== true){
                 attemptConnection();
             }
         }.bind(this)
@@ -72,7 +74,8 @@ module.exports = function(RED) {
 
 
         var attemptConnection = function(){
-            if(this._isAttemptingConnection === true){ 
+            if(this._isAttemptingConnection === true ||
+                this.isBeingDestroyed === true){ 
                 //console.log("Already in a connection attempt to the Bean with name \"" + this.name + "\"");
                 return false; 
             }
@@ -186,13 +189,16 @@ module.exports = function(RED) {
         }
 
         this.on("close", function(done) {
+            console.log("A Bean config node is being destroyed");
+            this.isBeingDestroyed = true;
             clearInterval(this.reconnectInterval);
             if (this.isConnected()) {
                 this.device.disconnect(function(){
-                    console.log("We disconnected from the Bean with name \"" + this.name + "\"");
+                    console.log("A Bean config node is finished being destroyed");
                     done();
                 }.bind(this));
             }else{
+                console.log("A Bean config node is finished being destroyed");
                 done();
             }
         });
