@@ -169,8 +169,11 @@ module.exports = function(RED) {
 
         // This is a second precaution in case the "disconnect" event isn't reached 
         if(this.connectiontype === 'constant'){
-            // Initial connection
-            attemptConnection();
+            // Queue up a call to attempt initial connection. 
+            // This lets the Bean nodes that depend on this configuration get setup before connction is attempted
+            setImmediate(function(){
+                attemptConnection();
+            })
 
             // Check connection status periodically and attempt to reconnect if disconnceted
             this.reconnectInterval = setInterval(function(){
