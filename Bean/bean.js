@@ -80,7 +80,7 @@ module.exports = function(RED) {
                 return false; 
             }
 
-            console.log("Attempting to connect to the Bean with name \"" + this.name + "\"");
+            console.log("Scanning for the Bean with name \"" + this.name + "\"");
 
             this._isAttemptingConnection = true;
 
