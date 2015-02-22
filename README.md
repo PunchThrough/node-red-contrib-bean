@@ -8,7 +8,7 @@ Node-Red allows for third party nodes to be made and distributed as npm modules.
 
 ## Installation
 
-1. Install Node.js: http://nodejs.org/download/
+1. Install Node.js (Note: 0.12.0 is not yet supported by Node-RED): http://nodejs.org/download/
 1. Install Node-RED
     1. Download: https://github.com/node-red/node-red/archive/master.zip
     1. Unzip
