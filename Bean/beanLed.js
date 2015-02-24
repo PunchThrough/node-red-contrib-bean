@@ -55,7 +55,6 @@ module.exports = function(RED) {
 
             if(this.beanConfig){
                 this.beanConfig.setColor(new Buffer(rgbValues), function(){
-                    //console.log("led color sent");
                 })
             }
         });

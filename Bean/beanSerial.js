@@ -48,15 +48,11 @@ module.exports = function(RED) {
 
         // respond to inputs....
         this.on('input', function (msg) {
-            console.log("I saw a payload: "+msg.payload);
             // in this example just send it straight on... should process it here really
             //this.send(msg);
             if(this.beanConfig){
-                console.log("Sending this string: " + msg.payload)
                 this.beanConfig.write(new Buffer(msg.payload), function(){
-                    //console.log("serial data sent");
                 })
-                
             }
         });
 

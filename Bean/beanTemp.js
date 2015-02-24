@@ -39,7 +39,6 @@ module.exports = function(RED) {
 
             if(this.beanConfig){
                 this.beanConfig.requestTemp(function(){
-                    //console.log("temperatured requested");
                 })
             }
         });
@@ -57,7 +56,6 @@ module.exports = function(RED) {
 
 
         var tempDataReceived = function(temp, valid){
-          console.log("temp Data Received: " + temp)
             var msg = {};
             msg.topic = "temp";
             msg.payload = (temp);
