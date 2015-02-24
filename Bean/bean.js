@@ -132,7 +132,9 @@ module.exports = function(RED) {
                 }
                 // Set the new disconnect timeout
                 this._disconnectTimer = setTimeout(function(){
-                    this.device.disconnect();
+                    if(this.isConnected() === true){
+                        this.device.disconnect();
+                    }
                 }.bind(this), seconds*1000);
             }else if(this.connectiontype === 'constant'){
 
