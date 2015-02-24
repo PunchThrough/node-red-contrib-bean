@@ -80,6 +80,12 @@ module.exports = function(RED) {
 
 
         var attemptConnection = function(){
+            attemptConnection_withPostConnectionTimeout();
+        }.bind(this)
+
+        // This function will attempt to connect to a Bean. 
+        // If successfully connected and the timeout parameter is passed, it will trigger a disconnect after "timeout" seconds
+        var attemptConnection_withPostConnectionTimeout = function(timeout){
             if(this._isAttemptingConnection === true ||
                 this.isBeingDestroyed === true){ 
                 //verboseLog("Already in a connection attempt to the Bean with name \"" + this.name + "\"");
@@ -100,6 +106,10 @@ module.exports = function(RED) {
                     this.device.on('disconnect', hasDisconnected);
                     this._isAttemptingConnection = false;
                     hasConnected();
+                    if(timeout !== undefined &&
+                        timeout !== null){
+                        setDisconnectionTimeout(timeout);
+                    }
                 }.bind(this))
             }.bind(this)
 
@@ -167,12 +177,11 @@ module.exports = function(RED) {
         };
 
         var performFunctionWhenConnected = function(aFunction){
-            setDisconnectionTimeout(this.connectiontimeout);
-
             if(this.isConnected() === true){
                 aFunction.call(this);
+                setDisconnectionTimeout(this.connectiontimeout);
             }else{
-                attemptConnection();
+                attemptConnection(this.connectiontimeout);
                 this._funqueue.push(aFunction);
             }
         }.bind(this)
