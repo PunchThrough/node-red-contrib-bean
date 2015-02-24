@@ -23,10 +23,16 @@ module.exports = function(RED) {
 
     // The main node definition - most things happen in here
     function BeanNode(n) {
-        console.log("A Bean config node is being instantiated");
+        var verboseLog = function (msg){
+            if (RED.settings.verbose) {
+                this.log(msg);
+            }
+        }.bind(this)
+
         // Create a RED node
         RED.nodes.createNode(this,n);
         events.EventEmitter.call(this);
+        verboseLog("A Bean config node is being instantiated");
 
         // Unlimited listeners
         this.setMaxListeners(0);
@@ -49,7 +55,7 @@ module.exports = function(RED) {
         this._isAttemptingConnection = false;
 
         var hasDisconnected = function (){
-            console.log("We disconnected from the Bean with name \"" + this.name + "\"");
+            if (RED.settings.verbose) { n.log("We disconnected from the Bean with name \"" + this.name + "\"");}
             this.emit("disconnected");
             if(this.connectiontype == 'constant' &&
                 this.isBeingDestroyed !== true){
@@ -58,7 +64,7 @@ module.exports = function(RED) {
         }.bind(this)
 
         var hasConnected = function (){
-            console.log("We connected to the Bean with name \"" + this.name + "\"");
+            verboseLog("We connected to the Bean with name \"" + this.name + "\"");
             this.emit("connected");
 
             // Release serial gate
@@ -76,18 +82,18 @@ module.exports = function(RED) {
         var attemptConnection = function(){
             if(this._isAttemptingConnection === true ||
                 this.isBeingDestroyed === true){ 
-                //console.log("Already in a connection attempt to the Bean with name \"" + this.name + "\"");
+                //verboseLog("Already in a connection attempt to the Bean with name \"" + this.name + "\"");
                 return false; 
             }
 
-            console.log("Scanning for the Bean with name \"" + this.name + "\"");
+            verboseLog("Scanning for the Bean with name \"" + this.name + "\"");
 
             this._isAttemptingConnection = true;
 
             this.emit("searching");
 
             var onDiscovery = function(bean) {
-                console.log("We found a desired Bean \"" + this.name + "\"");
+                verboseLog("We found a desired Bean \"" + this.name + "\"");
                 this.device = bean;
                 this.emit("connecting");
                 this.device.connectAndSetup(function(){
@@ -183,22 +189,22 @@ module.exports = function(RED) {
                 if(this.isConnected() === false){
                     attemptConnection();
                 }else{
-                    //console.log("We are currently connected to the Bean with name \"" + this.name + "\"");
+                    //verboseLog("We are currently connected to the Bean with name \"" + this.name + "\"");
                 }
             }.bind(this), 30*1000)
         }
 
         this.on("close", function(done) {
-            console.log("A Bean config node is being destroyed");
+            verboseLog("A Bean config node is being destroyed");
             this.isBeingDestroyed = true;
             clearInterval(this.reconnectInterval);
             if (this.isConnected()) {
                 this.device.disconnect(function(){
-                    console.log("A Bean config node is finished being destroyed");
+                    verboseLog("A Bean config node is finished being destroyed");
                     done();
                 }.bind(this));
             }else{
-                console.log("A Bean config node is finished being destroyed");
+                verboseLog("A Bean config node is finished being destroyed");
                 done();
             }
         });
