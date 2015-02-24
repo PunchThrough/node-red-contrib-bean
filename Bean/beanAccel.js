@@ -61,6 +61,7 @@ module.exports = function(RED) {
             msg.accelX = x;
             msg.accelY = y;
             msg.accelZ = z;
+            msg.payload = x +", "+ y +", "+ z;
             this.send(msg);
 
 
