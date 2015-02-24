@@ -54,6 +54,7 @@ module.exports = function(RED) {
 
         this._isAttemptingConnection = false;
 
+        // Called after a Bean has been disconnected
         var hasDisconnected = function (){
             verboseLog("We disconnected from the Bean with name \"" + this.name + "\"");
             this.emit("disconnected");
@@ -63,6 +64,7 @@ module.exports = function(RED) {
             }
         }.bind(this)
 
+        // Called after a Bean has successfully connected
         var hasConnected = function (){
             verboseLog("We connected to the Bean with name \"" + this.name + "\"");
             this.emit("connected");
@@ -78,7 +80,7 @@ module.exports = function(RED) {
         }.bind(this)
 
 
-
+        // This function will attempt to connect to a Bean. 
         var attemptConnection = function(){
             attemptConnection_withPostConnectionTimeout();
         }.bind(this)
@@ -120,7 +122,7 @@ module.exports = function(RED) {
             return true;
         }.bind(this)
 
-
+        // Used to check if this node is currently conencted to a Bean
         this.isConnected = function (){
             if(this.device
                 && this.device._peripheral.state == 'connected'){
@@ -130,6 +132,8 @@ module.exports = function(RED) {
             }
         }
 
+        // In the "Connect on Event" mode, this function sets a timeout for the bean to disconnect
+        // This timout should be reset every time a new event is sent to this Bean config node
         var setDisconnectionTimeout = function(seconds){
             if(this.connectiontype == 'timeout'){
                 // Clear any previous disconnect timeout
@@ -176,6 +180,8 @@ module.exports = function(RED) {
             })
         };
 
+        // This function will immediately execute "aFunction" if the Bean is connected 
+        // If the Bean is not connected, "aFunction" will be queued up an executed on next connection
         var performFunctionWhenConnected = function(aFunction){
             if(this.isConnected() === true){
                 aFunction.call(this);
@@ -205,6 +211,7 @@ module.exports = function(RED) {
             }.bind(this), 30*1000)
         }
 
+        // This event handle this Bean config node being destroyed
         this.on("close", function(done) {
             verboseLog("A Bean config node is being destroyed");
             this.isBeingDestroyed = true;
