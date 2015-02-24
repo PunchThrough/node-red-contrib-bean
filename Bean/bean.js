@@ -55,7 +55,7 @@ module.exports = function(RED) {
         this._isAttemptingConnection = false;
 
         var hasDisconnected = function (){
-            if (RED.settings.verbose) { n.log("We disconnected from the Bean with name \"" + this.name + "\"");}
+            verboseLog("We disconnected from the Bean with name \"" + this.name + "\"");
             this.emit("disconnected");
             if(this.connectiontype == 'constant' &&
                 this.isBeingDestroyed !== true){
