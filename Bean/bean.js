@@ -105,7 +105,7 @@ module.exports = function(RED) {
                 this.device = bean;
                 this.emit("connecting");
                 this.device.connectAndSetup(function(){
-                    this.device.on('disconnect', hasDisconnected);
+                    this.device.once('disconnect', hasDisconnected);
                     this._isAttemptingConnection = false;
                     hasConnected();
                     if(timeout !== undefined &&
