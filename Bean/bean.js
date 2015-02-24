@@ -23,10 +23,16 @@ module.exports = function(RED) {
 
     // The main node definition - most things happen in here
     function BeanNode(n) {
-        console.log("A Bean config node is being instantiated");
+        var verboseLog = function (msg){
+            if (RED.settings.verbose) {
+                this.log(msg);
+            }
+        }.bind(this)
+
         // Create a RED node
         RED.nodes.createNode(this,n);
         events.EventEmitter.call(this);
+        verboseLog("A Bean config node is being instantiated");
 
         // Unlimited listeners
         this.setMaxListeners(0);
@@ -48,8 +54,9 @@ module.exports = function(RED) {
 
         this._isAttemptingConnection = false;
 
+        // Called after a Bean has been disconnected
         var hasDisconnected = function (){
-            console.log("We disconnected from the Bean with name \"" + this.name + "\"");
+            verboseLog("We disconnected from the Bean with name \"" + this.name + "\"");
             this.emit("disconnected");
             if(this.connectiontype == 'constant' &&
                 this.isBeingDestroyed !== true){
@@ -57,8 +64,9 @@ module.exports = function(RED) {
             }
         }.bind(this)
 
+        // Called after a Bean has successfully connected
         var hasConnected = function (){
-            console.log("We connected to the Bean with name \"" + this.name + "\"");
+            verboseLog("We connected to the Bean with name \"" + this.name + "\"");
             this.emit("connected");
 
             // Release serial gate
@@ -72,28 +80,38 @@ module.exports = function(RED) {
         }.bind(this)
 
 
-
+        // This function will attempt to connect to a Bean. 
         var attemptConnection = function(){
+            attemptConnection_withPostConnectionTimeout();
+        }.bind(this)
+
+        // This function will attempt to connect to a Bean. 
+        // If successfully connected and the timeout parameter is passed, it will trigger a disconnect after "timeout" seconds
+        var attemptConnection_withPostConnectionTimeout = function(timeout){
             if(this._isAttemptingConnection === true ||
                 this.isBeingDestroyed === true){ 
-                //console.log("Already in a connection attempt to the Bean with name \"" + this.name + "\"");
+                //verboseLog("Already in a connection attempt to the Bean with name \"" + this.name + "\"");
                 return false; 
             }
 
-            console.log("Scanning for the Bean with name \"" + this.name + "\"");
+            verboseLog("Scanning for the Bean with name \"" + this.name + "\"");
 
             this._isAttemptingConnection = true;
 
             this.emit("searching");
 
             var onDiscovery = function(bean) {
-                console.log("We found a desired Bean \"" + this.name + "\"");
+                verboseLog("We found a desired Bean \"" + this.name + "\"");
                 this.device = bean;
                 this.emit("connecting");
                 this.device.connectAndSetup(function(){
-                    this.device.on('disconnect', hasDisconnected);
+                    this.device.once('disconnect', hasDisconnected);
                     this._isAttemptingConnection = false;
                     hasConnected();
+                    if(timeout !== undefined &&
+                        timeout !== null){
+                        setDisconnectionTimeout(timeout);
+                    }
                 }.bind(this))
             }.bind(this)
 
@@ -104,7 +122,7 @@ module.exports = function(RED) {
             return true;
         }.bind(this)
 
-
+        // Used to check if this node is currently conencted to a Bean
         this.isConnected = function (){
             if(this.device
                 && this.device._peripheral.state == 'connected'){
@@ -114,6 +132,8 @@ module.exports = function(RED) {
             }
         }
 
+        // In the "Connect on Event" mode, this function sets a timeout for the bean to disconnect
+        // This timout should be reset every time a new event is sent to this Bean config node
         var setDisconnectionTimeout = function(seconds){
             if(this.connectiontype == 'timeout'){
                 // Clear any previous disconnect timeout
@@ -126,7 +146,9 @@ module.exports = function(RED) {
                 }
                 // Set the new disconnect timeout
                 this._disconnectTimer = setTimeout(function(){
-                    this.device.disconnect();
+                    if(this.isConnected() === true){
+                        this.device.disconnect();
+                    }
                 }.bind(this), seconds*1000);
             }else if(this.connectiontype === 'constant'){
 
@@ -158,13 +180,14 @@ module.exports = function(RED) {
             })
         };
 
+        // This function will immediately execute "aFunction" if the Bean is connected 
+        // If the Bean is not connected, "aFunction" will be queued up an executed on next connection
         var performFunctionWhenConnected = function(aFunction){
-            setDisconnectionTimeout(this.connectiontimeout);
-
             if(this.isConnected() === true){
                 aFunction.call(this);
+                setDisconnectionTimeout(this.connectiontimeout);
             }else{
-                attemptConnection();
+                attemptConnection(this.connectiontimeout);
                 this._funqueue.push(aFunction);
             }
         }.bind(this)
@@ -183,22 +206,23 @@ module.exports = function(RED) {
                 if(this.isConnected() === false){
                     attemptConnection();
                 }else{
-                    //console.log("We are currently connected to the Bean with name \"" + this.name + "\"");
+                    //verboseLog("We are currently connected to the Bean with name \"" + this.name + "\"");
                 }
             }.bind(this), 30*1000)
         }
 
+        // This event handle this Bean config node being destroyed
         this.on("close", function(done) {
-            console.log("A Bean config node is being destroyed");
+            verboseLog("A Bean config node is being destroyed");
             this.isBeingDestroyed = true;
             clearInterval(this.reconnectInterval);
             if (this.isConnected()) {
                 this.device.disconnect(function(){
-                    console.log("A Bean config node is finished being destroyed");
+                    verboseLog("A Bean config node is finished being destroyed");
                     done();
                 }.bind(this));
             }else{
-                console.log("A Bean config node is finished being destroyed");
+                verboseLog("A Bean config node is finished being destroyed");
                 done();
             }
         });

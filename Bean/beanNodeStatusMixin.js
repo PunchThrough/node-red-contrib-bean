@@ -27,8 +27,8 @@ exports.configureBeanStatuses = function(){
 
     var setStatusConnecting = function(){
         this.status({
-            fill:"green",
-            shape:"ring",
+            fill:"yellow",
+            shape:"dot",
             text:"connecting..."
         });
     }.bind(this);

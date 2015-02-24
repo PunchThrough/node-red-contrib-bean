@@ -39,7 +39,6 @@ module.exports = function(RED) {
 
             if(this.beanConfig){
                 this.beanConfig.requestAccell(function(){
-                    //console.log("Accel requested");
                 })
             }
         });
@@ -59,10 +58,10 @@ module.exports = function(RED) {
         var accelDataReceived = function(x, y, z, valid){
             var msg = {};
             msg.topic = "accel";
-            console.log(x);
             msg.accelX = x;
             msg.accelY = y;
             msg.accelZ = z;
+            msg.payload = x +", "+ y +", "+ z;
             this.send(msg);
 
 
