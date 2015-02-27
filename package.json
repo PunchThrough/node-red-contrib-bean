@@ -9,7 +9,7 @@
     "url": "https://github.com/PunchThrough/node-red-contrib-bean/issues"
   },
   "dependencies": {
-    "ble-bean": "git://github.com/raykamp/ble-bean.git#712de585151450dcd536a880f93aa0360fd1ae42"
+    "ble-bean": "^2.1.0"
   },
   "repository": {
     "type": "git",

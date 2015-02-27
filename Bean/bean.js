@@ -116,7 +116,7 @@ module.exports = function(RED) {
             }.bind(this)
 
             bleBean.discoverWithFilter(function(bean) {
-                return (bean.uuid === this.uuid) || (bean.name === this.name);
+                return (bean.uuid === this.uuid) || (bean._peripheral.advertisement.localName === this.name);
             }.bind(this), onDiscovery);
 
             return true;
