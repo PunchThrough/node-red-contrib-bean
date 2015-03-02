@@ -36,6 +36,11 @@ module.exports = function(RED) {
 
         // respond to inputs....
         this.on('input', function (msg) {
+            if ( ! (typeof msg.payload == 'string' || msg.payload instanceof String)){
+                this.warn("Invalid input to the LED Bean node. The input payload should be a string containing three comma separated integers (0-255) as an input. For example: \"0,128,255\"");
+                return;
+            }
+
             var rgbValues = msg.payload.split(",");
             // Convert from strings to integers, and check range
             var outOfRange = false;
