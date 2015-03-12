@@ -9,16 +9,12 @@ Node-Red allows for third party nodes to be made and distributed as npm modules.
 ## Installation
 
 1. Install Node.js (Note: 0.12.0 is not yet supported by Node-RED): http://nodejs.org/download/
-1. Install Node-RED
-    1. Download: https://github.com/node-red/node-red/archive/master.zip
-    1. Unzip
-    1. `cd node-red-master`
-    1. `npm install`
-1. Install Bean nodes: `npm install node-red-contrib-bean`
+1. Install Node-RED: `sudo npm install -g node-red`
+1. Install Bean nodes: `npm install -g node-red-contrib-bean`
 
 ## Usage
 
-1. `node red`
+1. `sudo node-red`
 1. Open [http://localhost:1880](http://localhost:1880)
 
 ## Contributing
@@ -31,6 +27,8 @@ Node-Red allows for third party nodes to be made and distributed as npm modules.
 
 ## History
 
+0.2.0 : Better logging and reporting of errors, more accurate Bean connection timeout
+0.1.0 : More robust connection routines, fixed some crashes during deployment, better how-to-use text
 0.0.1 : Initial Release
 
 ## Authors
