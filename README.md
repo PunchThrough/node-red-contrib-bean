@@ -4,7 +4,7 @@ Node-Red is a graphic flow-style programming environment based on node.js. The a
 
 Node-Red allows for third party nodes to be made and distributed as npm modules. This project is set of node-red nodes that allow for easy interfacing to the LightBlue Bean.
 
-![](https://punchthrough.com/images/products/bean/node-red/Screen%20Shot%202015-01-25%20at%203.12.22%20PM.png  =500px)
+![](https://punchthrough.com/images/products/bean/node-red/Screen%20Shot%202015-01-25%20at%203.12.22%20PM.png)
 
 ## Installation
 
@@ -18,7 +18,7 @@ Node-Red allows for third party nodes to be made and distributed as npm modules.
 
 ## Updating
 
-1. `sudo npm update -g node-red node-red-contrib-bean`
+1. Update both Node-RED and Bean nodes: `sudo npm update -g node-red node-red-contrib-bean`
 
 ## Contributing
 
