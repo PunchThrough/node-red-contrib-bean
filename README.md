@@ -17,6 +17,10 @@ Node-Red allows for third party nodes to be made and distributed as npm modules.
 1. `sudo node-red`
 1. Open [http://localhost:1880](http://localhost:1880)
 
+## Updating
+
+1. `sudo npm update -g node-red node-red-contrib-bean`
+
 ## Contributing
 
 1. Fork it!
