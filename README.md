@@ -27,9 +27,9 @@ Node-Red allows for third party nodes to be made and distributed as npm modules.
 
 ## History
 
-0.2.0 : Better logging and reporting of errors, more accurate Bean connection timeout
-0.1.0 : More robust connection routines, fixed some crashes during deployment, better how-to-use text
-0.0.1 : Initial Release
+- 0.2.0 : Better logging and reporting of errors, more accurate Bean connection timeout
+- 0.1.0 : More robust connection routines, fixed some crashes during deployment, better how-to-use text
+- 0.0.1 : Initial Release
 
 ## Authors
 
