@@ -16,8 +16,8 @@ Node-Red allows for third party nodes to be made and distributed as npm modules.
 1. Install Node-RED: `sudo npm install -g node-red`
 1. Install Bean nodes
     1. `mkdir ~/.node-red/node_modules`
-    2. `cd ~/.node-red`
-    3. `npm install node-red-contrib-bean`
+    1. `cd ~/.node-red`
+    1. `npm install node-red-contrib-bean`
 
 ## Usage
 
@@ -26,7 +26,10 @@ Node-Red allows for third party nodes to be made and distributed as npm modules.
 
 ## Updating
 
-1. Update both Node-RED and Bean nodes: `sudo npm update -g node-red node-red-contrib-bean`
+1. Update Node-RED: `sudo npm update -g node-red`
+1. Update Bean nodes
+    1. `cd ~/.node-red`
+    1. `npm update node-red-contrib-bean`
 
 ## Contributing
 
