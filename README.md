@@ -15,7 +15,7 @@ Node-Red allows for third party nodes to be made and distributed as npm modules.
     - [BeagleBone Black](http://nodered.org/docs/hardware/beagleboneblack.html)
 1. Install Node-RED: `sudo npm install -g node-red`
 1. Install Bean nodes
-    1. `mkdir ~/.node-red/node_modules`
+    1. `mkdir -p ~/.node-red/node_modules`
     1. `cd ~/.node-red`
     1. `npm install node-red-contrib-bean`
 
