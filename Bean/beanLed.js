@@ -41,6 +41,20 @@ module.exports = function(RED) {
                 return;
             }
 
+            if(msg.payload.toUpperCase() === "RED"){
+                this.beanConfig.setColor(new Buffer([ 255, 0, 0]), function(){})
+                return;
+            }else if(msg.payload.toUpperCase() === "GREEN"){
+                this.beanConfig.setColor(new Buffer([ 0, 255, 0]), function(){})
+                return;
+            }else if(msg.payload.toUpperCase() === "BLUE"){
+                this.beanConfig.setColor(new Buffer([ 0, 0, 255]), function(){})
+                return;
+            }else if(msg.payload.toUpperCase() === "OFF"){
+                this.beanConfig.setColor(new Buffer([ 0, 0, 0]), function(){})
+                return;
+            }
+
             var rgbValues = msg.payload.split(",");
             // Convert from strings to integers, and check range
             var outOfRange = false;
