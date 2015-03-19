@@ -79,6 +79,10 @@
             return this.name?"node_label_italic":"";
         },
         oneditprepare: function() {
+            try {
+                $("#node-config-input-name").autocomplete( "destroy" );
+            } catch(err) {
+            }
             $("#node-config-lookup-bean").click(function() {
                 $("#node-config-lookup-bean").addClass('disabled');
                 $.getJSON('discoveredbeans',function(data) {
