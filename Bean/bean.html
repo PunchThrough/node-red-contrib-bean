@@ -18,7 +18,8 @@
     <br/>
     <div class="form-row">
         <label for="node-config-input-name"><i class="fa fa-tag"></i> Name</label>
-        <input type="text" id="node-config-input-name" placeholder="Name">
+        <input type="text" id="node-config-input-name" style="width:60%;" placeholder="Name">
+        <a id="node-config-lookup-bean" class="btn"><i id="node-config-lookup-serial-icon" class="fa fa-search"></i></a>
     </div>
 
     <div class="form-row">
@@ -76,6 +77,36 @@
         },
         labelStyle: function() { // sets the class to apply to the label
             return this.name?"node_label_italic":"";
+        },
+        oneditprepare: function() {
+            $("#node-config-lookup-bean").click(function() {
+                $("#node-config-lookup-bean").addClass('disabled');
+                $.getJSON('discoveredbeans',function(data) {
+                    $("#node-config-lookup-bean").removeClass('disabled');
+                    var beanNames = [];
+                    $.each(data, function(i, bean){
+                        beanNames.push({
+                            "label":bean.name,
+                            "value":bean.name,
+                            "rssi":bean.rssi
+                        });
+                    });
+                    $("#node-config-input-name").autocomplete({
+                        source:beanNames,
+                        minLength:0,
+                        close: function( event, ui ) {
+                            $("#node-config-input-name").autocomplete( "destroy" );
+                        }
+                    })
+                    .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+                      return $( "<li>" )
+                        .data( "ui-autocomplete-item", item )
+                        .append( "<a>" + item.label + "<span style=\"float:right; color:LightGray;\">RSSI: " + item.rssi + "</span></a>" )
+                        .appendTo( ul );
+                    };
+                    $("#node-config-input-name").autocomplete("search","");
+                });
+            });
         }
     });
 </script>

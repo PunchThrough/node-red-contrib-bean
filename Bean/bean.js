@@ -20,6 +20,8 @@ module.exports = function(RED) {
     //var foo = require("foo-library");
     var bleBean = require("ble-bean");
     var events = require('events');
+    var beanScanner = require('./beanScanner.js');
+
 
     // The main node definition - most things happen in here
     function BeanNode(n) {
@@ -33,6 +35,8 @@ module.exports = function(RED) {
         RED.nodes.createNode(this,n);
         events.EventEmitter.call(this);
         verboseLog("A Bean config node is being instantiated");
+
+        beanScanner.startScanning();
 
         // Unlimited listeners
         this.setMaxListeners(0);
@@ -216,6 +220,7 @@ module.exports = function(RED) {
             verboseLog("A Bean config node is being destroyed");
             this.isBeingDestroyed = true;
             clearInterval(this.reconnectInterval);
+            beanScanner.stopScanning();
             if (this.isConnected()) {
                 this.device.disconnect(function(){
                     verboseLog("A Bean config node is finished being destroyed");
@@ -232,4 +237,19 @@ module.exports = function(RED) {
     // Node functions.
     RED.nodes.registerType("bean",BeanNode);
 
+    RED.httpAdmin.get("/discoveredbeans",function(req,res) {
+        res.writeHead(200, {'Content-Type': 'text/plain'});
+        var beans = beanScanner.getDiscoveredBeans();
+        var beanReport =[];
+        for (i = 0; i < beans.length; i++) {
+            beanReport.push({
+                "name":beans[i]._peripheral.advertisement.localName,
+                "uuid":beans[i].uuid,
+                "rssi":beans[i]._peripheral.rssi
+            });
+        }
+
+        res.write(JSON.stringify(beanReport));
+        res.end();
+    });
 }
