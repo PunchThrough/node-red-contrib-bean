@@ -50,6 +50,7 @@ Node-Red allows for third party nodes to be made and distributed as npm modules.
 
 * Ray Kampmeier [@raykamp](https://github.com/raykamp)
 * Simone Giertz [@simsalapim](https://github.com/simsalapim)
+* Geoffrey Arnold [@garnold](https://github.com/garnold)
 
 ## Credits
 
