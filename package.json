@@ -33,7 +33,8 @@
       "beanAccel": "Bean/beanAccel.js",
       "beanLed": "Bean/beanLed.js",
       "beanSerial": "Bean/beanSerial.js",
-      "beanTemp": "Bean/beanTemp.js"
+      "beanTemp": "Bean/beanTemp.js",
+      "beanScratch": "Bean/beanScratch.js"
     }
   }
 }
