@@ -31,6 +31,51 @@ THE SOFTWARE.
         <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
         <input type="text" id="node-input-name">
     </div>
+    <div class="form-row">
+        <input type="checkbox" id="node-input-scratch1" style="display: inline-block; width: auto; vertical-align: middle;">
+        <label for="node-input-scratch1">Scratch 1</label>
+        msg.<input type="text" id="node-input-property1" placeholder="scratch1" style="display: inline-block; width: auto; vertical-align: middle;">
+        <select id="node-input-type1" style="display: inline-block; width: auto; vertical-align: middle;">
+            <option value="string">String</option>
+            <option value="number">Number</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <input type="checkbox" id="node-input-scratch2" style="display: inline-block; width: auto; vertical-align: middle;">
+        <label for="node-input-scratch2">Scratch 2</label>
+        msg.<input type="text" id="node-input-property2" placeholder="scratch2" style="display: inline-block; width: auto; vertical-align: middle;">
+        <select id="node-input-type2" style="display: inline-block; width: auto; vertical-align: middle;">
+            <option value="string">String</option>
+            <option value="number">Number</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <input type="checkbox" id="node-input-scratch3" style="display: inline-block; width: auto; vertical-align: middle;">
+        <label for="node-input-scratch3">Scratch 3</label>
+        msg.<input type="text" id="node-input-property3" placeholder="scratch3" style="display: inline-block; width: auto; vertical-align: middle;">
+        <select id="node-input-type3" style="display: inline-block; width: auto; vertical-align: middle;">
+            <option value="string">String</option>
+            <option value="number">Number</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <input type="checkbox" id="node-input-scratch4" style="display: inline-block; width: auto; vertical-align: middle;">
+        <label for="node-input-scratch4">Scratch 4</label>
+        msg.<input type="text" id="node-input-property4" placeholder="scratch4" style="display: inline-block; width: auto; vertical-align: middle;">
+        <select id="node-input-type4" style="display: inline-block; width: auto; vertical-align: middle;">
+            <option value="string">String</option>
+            <option value="number">Number</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <input type="checkbox" id="node-input-scratch5" style="display: inline-block; width: auto; vertical-align: middle;">
+        <label for="node-input-scratch5">Scratch 5</label>
+        msg.<input type="text" id="node-input-property5" placeholder="scratch5" style="display: inline-block; width: auto; vertical-align: middle;">
+        <select id="node-input-type5" style="display: inline-block; width: auto; vertical-align: middle;">
+            <option value="string">String</option>
+            <option value="number">Number</option>
+        </select>
+    </div>
 </script>
 
 <script type="text/x-red" data-help-name="bean scratch">
@@ -48,13 +93,59 @@ THE SOFTWARE.
             },
             name: {
                 value: ''
+            },
+            scratch1: {
+                value: true
+            },
+            property1: {
+                value: ''
+            },
+            type1: {
+                value: ''
+            },
+            scratch2: {
+                value: true
+            },
+            property2: {
+                value: ''
+            },
+            type2: {
+                value: ''
+            },
+            scratch3: {
+                value: true
+            },
+            property3: {
+                value: ''
+            },
+            type3: {
+                value: ''
+            },
+            scratch4: {
+                value: true
+            },
+            property4: {
+                value: ''
+            },
+            type4: {
+                value: ''
+            },
+            scratch5: {
+                value: true
+            },
+            property5: {
+                value: ''
+            },
+            type5: {
+                value: ''
             }
         },
         inputs: 1,
         outputs: 1,
         icon: 'hash.png',
         label: function() {
-            return this.name || 'scratch';
+            var bean = RED.nodes.node(this.bean);
+            return this.name || ((bean ? bean.label() : 'Bean') + ' scratch');
         },
         labelStyle: function() {
             return this.name ? 'node_label_italic' : '';

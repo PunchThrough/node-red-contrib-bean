@@ -30,6 +30,26 @@ module.exports = function(RED) {
         RED.nodes.createNode(this, n);
         this.bean = RED.nodes.getNode(n.bean);
 
+        this.scratch1 = n.scratch1;
+        this.property1 = n.property1 || 'scratch1';
+        this.type1 = n.type1 || 'string';
+
+        this.scratch2 = n.scratch2;
+        this.property2 = n.property2 || 'scratch2';
+        this.type2 = n.type2 || 'string';
+
+        this.scratch3 = n.scratch3;
+        this.property3 = n.property3 || 'scratch3';
+        this.type3 = n.type3 || 'string';
+
+        this.scratch4 = n.scratch4;
+        this.property4 = n.property4 || 'scratch4';
+        this.type4 = n.type4 || 'string';
+
+        this.scratch5 = n.scratch5;
+        this.property5 = n.property5 || 'scratch5';
+        this.type5 = n.type5 || 'string';
+
         var node = this;
 
         this.on('input', function(msg) {
@@ -38,24 +58,51 @@ module.exports = function(RED) {
                 node.bean.requestTemp(function() {});
 
                 if (node.bean.isConnected()) {
+                    // TODO do not invoke `node.bean.device.readXXX` if disabled
                     node.bean.device.readOne(function(data) {
-                        var value = data.toString('utf8');
-                        node.log(value);
-                        msg.scratch1 = value;
+                        if (node.scratch1) {
+                            msg[node.property1] = valueOf(data, node.type1);
+                        }
 
                         node.bean.device.readTwo(function(data) {
-                            var value = data.readUInt32LE(0);
-                            node.log(value);
-                            msg.scratch2 = value;
+                            if (node.scratch2) {
+                                msg[node.property2] = valueOf(data, node.type2);
+                            }
 
-                            node.send(msg);
+                            node.bean.device.readThree(function(data) {
+                                if (node.scratch3) {
+                                    msg[node.property3] = valueOf(data, node.type3);
+                                }
+
+                                node.bean.device.readFour(function(data) {
+                                    if (node.scratch4) {
+                                        msg[node.property4] = valueOf(data, node.type4);
+                                    }
+
+                                    node.bean.device.readFive(function(data) {
+                                        if (node.scratch5) {
+                                            msg[node.property5] = valueOf(data, node.type5);
+                                        }
+
+                                        node.send(msg);
+                                    });
+                                });
+                            });
                         });
                     });
                 }
             }
         });
 
-        this.beanConfig = this.bean; // required by status mixin
+        var valueOf = function(data, type) {
+            if (type == 'number') {
+                return data.readUInt32LE(0);
+            } else {
+                return data.toString('utf8');
+            }
+        }
+
+        this.beanConfig = this.bean; // status mixin assumes `beanConfig` property exists
         beanStatus.configureBeanStatuses.call(this);
     }
     RED.nodes.registerType('bean scratch', BeanScratchCharacteristicsNode);
