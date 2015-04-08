@@ -95,7 +95,9 @@ module.exports = function(RED) {
         });
 
         var valueOf = function(data, type) {
-            if (type == 'number') {
+            if (type == 'buffer') {
+                return data;
+            } else if (type == 'number') {
                 return data.readUInt32LE(0);
             } else {
                 return data.toString('utf8');
