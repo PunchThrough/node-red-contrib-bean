@@ -25,7 +25,8 @@
   ],
   "contributors": [
     "Ray Kampmeier <raykampmeier@gmail.com> (http://raykampmeier.com/)",
-    "Simone Giertz <simone@giertz.com> (http://simonegiertz.com/)"
+    "Simone Giertz <simone@giertz.com> (http://simonegiertz.com/)",
+    "Geoffrey Arnold <geoffrey@geoffreyarnold.com> (https://github.com/garnold)"
   ],
   "node-red": {
     "nodes": {
