@@ -59,24 +59,24 @@ module.exports = function(RED) {
         this._isAttemptingConnection = false;
 
         // Called after a Bean has been disconnected
-        var hasDisconnected = function (){
+        var _hasDisconnected = function (){
             verboseLog("We disconnected from the Bean with name \"" + this.name + "\"");
             this.emit("disconnected");
             if(this.connectiontype == 'constant' &&
                 this.isBeingDestroyed !== true){
-                attemptConnection();
+                _attemptConnection();
             }
         }.bind(this)
 
         // Called after a Bean has successfully connected
-        var hasConnected = function (){
+        var _hasConnected = function (){
             verboseLog("We connected to the Bean with name \"" + this.name + "\"");
             this.emit("connected");
 
             // Release serial gate
             this.device.send(new Buffer([0x05, 0x50]), new Buffer([]), function(){});
 
-            setDisconnectionTimeout(this.connectiontimeout);
+            _setDisconnectionTimeout(this.connectiontimeout);
             
             while (this._funqueue.length > 0) {
                 (this._funqueue.shift()).call(this);   
@@ -85,13 +85,7 @@ module.exports = function(RED) {
 
 
         // This function will attempt to connect to a Bean. 
-        var attemptConnection = function(){
-            attemptConnection_withPostConnectionTimeout();
-        }.bind(this)
-
-        // This function will attempt to connect to a Bean. 
-        // If successfully connected and the timeout parameter is passed, it will trigger a disconnect after "timeout" seconds
-        var attemptConnection_withPostConnectionTimeout = function(timeout){
+        var _attemptConnection = function(){
             if(this._isAttemptingConnection === true ||
                 this.isBeingDestroyed === true){ 
                 //verboseLog("Already in a connection attempt to the Bean with name \"" + this.name + "\"");
@@ -109,13 +103,9 @@ module.exports = function(RED) {
                 this.device = bean;
                 this.emit("connecting");
                 this.device.connectAndSetup(function(){
-                    this.device.once('disconnect', hasDisconnected);
+                    this.device.once('disconnect', _hasDisconnected);
                     this._isAttemptingConnection = false;
-                    hasConnected();
-                    if(timeout !== undefined &&
-                        timeout !== null){
-                        setDisconnectionTimeout(timeout);
-                    }
+                    _hasConnected();
                 }.bind(this))
             }.bind(this)
 
@@ -127,7 +117,7 @@ module.exports = function(RED) {
         }.bind(this)
 
         // Used to check if this node is currently conencted to a Bean
-        this.isConnected = function (){
+        this._isConnected = function (){
             if(this.device
                 && this.device._peripheral.state == 'connected'){
                 return true;
@@ -138,7 +128,7 @@ module.exports = function(RED) {
 
         // In the "Connect on Event" mode, this function sets a timeout for the bean to disconnect
         // This timout should be reset every time a new event is sent to this Bean config node
-        var setDisconnectionTimeout = function(seconds){
+        var _setDisconnectionTimeout = function(seconds){
             if(this.connectiontype == 'timeout'){
                 // Clear any previous disconnect timeout
                 if (typeof(this._disconnectTimer) === 'undefined' 
@@ -150,7 +140,7 @@ module.exports = function(RED) {
                 }
                 // Set the new disconnect timeout
                 this._disconnectTimer = setTimeout(function(){
-                    if(this.isConnected() === true){
+                    if(this._isConnected() === true){
                         this.device.disconnect();
                     }
                 }.bind(this), seconds*1000);
@@ -161,37 +151,37 @@ module.exports = function(RED) {
 
 
         this.write = function(data, done){
-            performFunctionWhenConnected(function(){
+            _performFunctionWhenConnected(function(){
                 this.device.write(data, done);
             })
         }
 
         this.setColor = function(color,done){
-            performFunctionWhenConnected(function(){
+            _performFunctionWhenConnected(function(){
                 this.device.setColor(color, done);
             })
         };
 
         this.requestAccell = function(done){
-            performFunctionWhenConnected(function(){
+            _performFunctionWhenConnected(function(){
                 this.device.requestAccell(done);
             })
         };
 
         this.requestTemp = function(done){
-            performFunctionWhenConnected(function(){
+            _performFunctionWhenConnected(function(){
                 this.device.requestTemp(done);
             })
         };
 
         // This function will immediately execute "aFunction" if the Bean is connected 
         // If the Bean is not connected, "aFunction" will be queued up an executed on next connection
-        var performFunctionWhenConnected = function(aFunction){
-            if(this.isConnected() === true){
+        var _performFunctionWhenConnected = function(aFunction){
+            if(this._isConnected() === true){
                 aFunction.call(this);
-                setDisconnectionTimeout(this.connectiontimeout);
+                _setDisconnectionTimeout(this.connectiontimeout);
             }else{
-                attemptConnection(this.connectiontimeout);
+                _attemptConnection(this.connectiontimeout);
                 this._funqueue.push(aFunction);
             }
         }.bind(this)
@@ -202,13 +192,13 @@ module.exports = function(RED) {
             // Queue up a call to attempt initial connection. 
             // This lets the Bean nodes that depend on this configuration get setup before connction is attempted
             setImmediate(function(){
-                attemptConnection();
+                _attemptConnection();
             })
 
             // Check connection status periodically and attempt to reconnect if disconnceted
             this.reconnectInterval = setInterval(function(){
-                if(this.isConnected() === false){
-                    attemptConnection();
+                if(this._isConnected() === false){
+                    _attemptConnection();
                 }else{
                     //verboseLog("We are currently connected to the Bean with name \"" + this.name + "\"");
                 }
@@ -221,7 +211,7 @@ module.exports = function(RED) {
             this.isBeingDestroyed = true;
             clearInterval(this.reconnectInterval);
             beanScanner.stopScanning();
-            if (this.isConnected()) {
+            if (this._isConnected()) {
                 this.device.disconnect(function(){
                     verboseLog("A Bean config node is finished being destroyed");
                     done();
