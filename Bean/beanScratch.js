@@ -24,6 +24,7 @@ THE SOFTWARE.
 
 module.exports = function(RED) {
     'use strict';
+    var async = require('async');
     var beanStatus = require('./beanNodeStatusMixin.js');
 
     function BeanScratchCharacteristicsNode(n) {
@@ -57,38 +58,55 @@ module.exports = function(RED) {
                 // force connection
                 node.bean.requestTemp(function() {});
 
-                if (node.bean.isConnected()) {
-                    // TODO do not invoke `node.bean.device.readXXX` if disabled
-                    node.bean.device.readOne(function(data) {
-                        if (node.scratch1) {
-                            msg[node.property1] = valueOf(data, node.type1);
-                        }
-
-                        node.bean.device.readTwo(function(data) {
-                            if (node.scratch2) {
-                                msg[node.property2] = valueOf(data, node.type2);
-                            }
-
-                            node.bean.device.readThree(function(data) {
-                                if (node.scratch3) {
-                                    msg[node.property3] = valueOf(data, node.type3);
-                                }
-
-                                node.bean.device.readFour(function(data) {
-                                    if (node.scratch4) {
-                                        msg[node.property4] = valueOf(data, node.type4);
-                                    }
-
-                                    node.bean.device.readFive(function(data) {
-                                        if (node.scratch5) {
-                                            msg[node.property5] = valueOf(data, node.type5);
-                                        }
-
-                                        node.send(msg);
-                                    });
-                                });
+                if (node.bean._isConnected()) {
+                    var tasks = [];
+                    if (node.scratch1) {
+                        tasks.push(function(callback) {
+                            node.bean.device.readOne(function(data) {
+                                msg[node.property1] = valueOf(data, node.type1);
+                                callback(null);
                             });
                         });
+                    }
+                    if (node.scratch2) {
+                        tasks.push(function(callback) {
+                            node.bean.device.readTwo(function(data) {
+                                msg[node.property2] = valueOf(data, node.type2);
+                                callback(null);
+                            });
+                        });
+                    }
+                    if (node.scratch3) {
+                        tasks.push(function(callback) {
+                            node.bean.device.readThree(function(data) {
+                                msg[node.property3] = valueOf(data, node.type3);
+                                callback(null);
+                            });
+                        });
+                    }
+                    if (node.scratch4) {
+                        tasks.push(function(callback) {
+                            node.bean.device.readFour(function(data) {
+                                msg[node.property4] = valueOf(data, node.type4);
+                                callback(null);
+                            });
+                        });
+                    }
+                    if (node.scratch5) {
+                        tasks.push(function(callback) {
+                            node.bean.device.readFive(function(data) {
+                                msg[node.property5] = valueOf(data, node.type5);
+                                callback(null);
+                            });
+                        });
+                    }
+
+                    async.series(tasks, function(error, results) {
+                        if (error) {
+                            node.error(error);
+                        } else {
+                            node.send(msg);
+                        }
                     });
                 }
             }
