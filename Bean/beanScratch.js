@@ -108,12 +108,16 @@ module.exports = function(RED) {
         });
 
         var valueOf = function(data, type) {
-            if (type == 'buffer') {
-                return data;
-            } else if (type == 'number') {
-                return data.readUInt32LE(0);
+            if (data && data.length >= 2) {
+                if (type == 'buffer') {
+                    return data;
+                } else if (type == 'number') {
+                    return data.readUInt32LE(0);
+                } else {
+                    return data.toString('utf8');
+                }
             } else {
-                return data.toString('utf8');
+                return null;
             }
         }
 
