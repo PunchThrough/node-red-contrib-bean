@@ -125,4 +125,45 @@ module.exports = function(RED) {
         beanStatus.configureBeanStatuses.call(this);
     }
     RED.nodes.registerType('read scratch', BeanReadScratchNode);
+
+    function BeanWriteScratchNode(n) {
+        RED.nodes.createNode(this, n);
+        this.bean = RED.nodes.getNode(n.bean);
+        this.writeMethod = n.writeMethod || 'writeOne';
+
+        var node = this;
+
+        this.on('input', function(msg) {
+            if (node.bean) {
+                var buffer = bufferize(msg.payload);
+                node.bean[node.writeMethod](buffer, function() {
+                    node.send(msg);
+                });
+            }
+        });
+
+        var bufferize = function(payload) {
+            if (payload) {
+                if (Buffer.isBuffer(payload)) {
+                    return new Buffer(payload);
+                } else {
+                    var number = Number(payload);
+                    if (isNaN(number)) {
+                        return new Buffer(payload, 'utf8');
+                    } else {
+                        var buffer = new Buffer(4);
+                        buffer.writeUInt32LE(Number(payload), 0);
+
+                        return buffer;
+                    }
+                }
+            } else {
+                return new Buffer(0);
+            }
+        }
+
+        this.beanConfig = this.bean; // status mixin assumes `beanConfig` property exists
+        beanStatus.configureBeanStatuses.call(this);
+    }
+    RED.nodes.registerType('write scratch', BeanWriteScratchNode);
 }

@@ -83,10 +83,36 @@ THE SOFTWARE.
     </div>
 </script>
 
+<script type="text/x-red" data-template-name="write scratch">
+    <div class="form-row">
+        <label for="node-input-bean"><i class="fa fa-cog"></i> Bean</label>
+        <input type="text" id="node-input-bean">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-writeMethod"><i class="fa fa-random"></i> to</label>
+        <select id="node-input-writeMethod" style="display: inline-block; width: auto; vertical-align: middle;">
+            <option value="writeOne">Scratch 1</option>
+            <option value="writeTwo">Scratch 2</option>
+            <option value="writeThree">Scratch 3</option>
+            <option value="writeFour">Scratch 4</option>
+            <option value="writeFive">Scratch 5</option>
+        </select>
+    </div>
+</script>
+
 <script type="text/x-red" data-help-name="read scratch">
     <p>A Node-RED node to read <a href="http://punchthrough.com/bean/arduino-users-guide/#scratch_characteristics" target="_blank">scratch characteristics</a> from a <a href="https://punchthrough.com/bean/" target="_blank">LightBlue Bean</a>.</p>
     <p>Sending any message to this node will trigger a request to read a Bean's scratch characteristics.  By default, the values of all 5 scratch characteristics will be converted to strings and output as <code>msg.scratch[1-5]</code> properties.</p>
     <p>You can configure which characteristics are added to <code>msg</code>, as well as their types and property names, in the node template.</p>
+</script>
+
+<script type="text/x-red" data-help-name="write scratch">
+    <p>A Node-RED node to write <a href="http://punchthrough.com/bean/arduino-users-guide/#scratch_characteristics" target="_blank">scratch characteristics</a> on a <a href="https://punchthrough.com/bean/" target="_blank">LightBlue Bean</a>.</p>
+    <p>This node can be connected to the output of any node, and will write <code>msg.payload</code> to the selected scratch characteristic.  <code>msg.payload</code> can be a <code>Buffer</code>, <code>Number</code>, or <code>String</code>.  By default, the value will be written to scratch bank 1.</p>
 </script>
 
 <script type="text/javascript">
@@ -158,5 +184,34 @@ THE SOFTWARE.
         labelStyle: function() {
             return this.name ? 'node_label_italic' : '';
         }
+    });
+
+    RED.nodes.registerType('write scratch', {
+        category: 'LightBlue Bean',
+        color: '#3FADB5',
+        defaults: {
+            bean: {
+                value: '',
+                required: true,
+                type: 'bean'
+            },
+            name: {
+                value: ''
+            },
+            writeMethod: {
+                value: ''
+            }
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: 'hash.png',
+        label: function() {
+            var bean = RED.nodes.node(this.bean);
+            return this.name || ((bean ? bean.label() : 'Bean') + ' write scratch');
+        },
+        labelStyle: function() {
+            return this.name ? 'node_label_italic' : '';
+        },
+        align: 'right'
     });
 </script>
