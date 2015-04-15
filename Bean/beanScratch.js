@@ -27,7 +27,7 @@ module.exports = function(RED) {
     var async = require('async');
     var beanStatus = require('./beanNodeStatusMixin.js');
 
-    function BeanScratchCharacteristicsNode(n) {
+    function BeanReadScratchNode(n) {
         RED.nodes.createNode(this, n);
         this.bean = RED.nodes.getNode(n.bean);
 
@@ -125,5 +125,5 @@ module.exports = function(RED) {
         this.beanConfig = this.bean; // status mixin assumes `beanConfig` property exists
         beanStatus.configureBeanStatuses.call(this);
     }
-    RED.nodes.registerType('bean scratch', BeanScratchCharacteristicsNode);
+    RED.nodes.registerType('read scratch', BeanReadScratchNode);
 }

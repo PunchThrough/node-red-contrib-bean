@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
 
-<script type="text/x-red" data-template-name="bean scratch">
+<script type="text/x-red" data-template-name="read scratch">
     <div class="form-row">
         <label for="node-input-bean"><i class="fa fa-cog"></i> Bean</label>
         <input type="text" id="node-input-bean">
@@ -83,14 +83,14 @@ THE SOFTWARE.
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="bean scratch">
+<script type="text/x-red" data-help-name="read scratch">
     <p>A Node-RED node to read <a href="http://punchthrough.com/bean/arduino-users-guide/#scratch_characteristics" target="_blank">scratch characteristics</a> from a <a href="https://punchthrough.com/bean/" target="_blank">LightBlue Bean</a>.</p>
     <p>Sending any message to this node will trigger a request to read a Bean's scratch characteristics.  By default, the values of all 5 scratch characteristics will be converted to strings and output as <code>msg.scratch[1-5]</code> properties.</p>
     <p>You can configure which characteristics are added to <code>msg</code>, as well as their types and property names, in the node template.</p>
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('bean scratch', {
+    RED.nodes.registerType('read scratch', {
         category: 'LightBlue Bean',
         color: '#3FADB5',
         defaults: {
@@ -153,7 +153,7 @@ THE SOFTWARE.
         icon: 'hash.png',
         label: function() {
             var bean = RED.nodes.node(this.bean);
-            return this.name || ((bean ? bean.label() : 'Bean') + ' scratch');
+            return this.name || ((bean ? bean.label() : 'Bean') + ' read scratch');
         },
         labelStyle: function() {
             return this.name ? 'node_label_italic' : '';
