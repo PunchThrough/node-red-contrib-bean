@@ -55,60 +55,55 @@ module.exports = function(RED) {
 
         this.on('input', function(msg) {
             if (node.bean) {
-                // force connection
-                node.bean.requestTemp(function() {});
-
-                if (node.bean._isConnected()) {
-                    var tasks = [];
-                    if (node.scratch1) {
-                        tasks.push(function(callback) {
-                            node.bean.device.readOne(function(data) {
-                                msg[node.property1] = valueOf(data, node.type1);
-                                callback(null);
-                            });
+                var tasks = [];
+                if (node.scratch1) {
+                    tasks.push(function(callback) {
+                        node.bean.readOne(function(data) {
+                            msg[node.property1] = valueOf(data, node.type1);
+                            callback(null);
                         });
-                    }
-                    if (node.scratch2) {
-                        tasks.push(function(callback) {
-                            node.bean.device.readTwo(function(data) {
-                                msg[node.property2] = valueOf(data, node.type2);
-                                callback(null);
-                            });
-                        });
-                    }
-                    if (node.scratch3) {
-                        tasks.push(function(callback) {
-                            node.bean.device.readThree(function(data) {
-                                msg[node.property3] = valueOf(data, node.type3);
-                                callback(null);
-                            });
-                        });
-                    }
-                    if (node.scratch4) {
-                        tasks.push(function(callback) {
-                            node.bean.device.readFour(function(data) {
-                                msg[node.property4] = valueOf(data, node.type4);
-                                callback(null);
-                            });
-                        });
-                    }
-                    if (node.scratch5) {
-                        tasks.push(function(callback) {
-                            node.bean.device.readFive(function(data) {
-                                msg[node.property5] = valueOf(data, node.type5);
-                                callback(null);
-                            });
-                        });
-                    }
-
-                    async.series(tasks, function(error, results) {
-                        if (error) {
-                            node.error(error);
-                        } else {
-                            node.send(msg);
-                        }
                     });
                 }
+                if (node.scratch2) {
+                    tasks.push(function(callback) {
+                        node.bean.readTwo(function(data) {
+                            msg[node.property2] = valueOf(data, node.type2);
+                            callback(null);
+                        });
+                    });
+                }
+                if (node.scratch3) {
+                    tasks.push(function(callback) {
+                        node.bean.readThree(function(data) {
+                            msg[node.property3] = valueOf(data, node.type3);
+                            callback(null);
+                        });
+                    });
+                }
+                if (node.scratch4) {
+                    tasks.push(function(callback) {
+                        node.bean.readFour(function(data) {
+                            msg[node.property4] = valueOf(data, node.type4);
+                            callback(null);
+                        });
+                    });
+                }
+                if (node.scratch5) {
+                    tasks.push(function(callback) {
+                        node.bean.readFive(function(data) {
+                            msg[node.property5] = valueOf(data, node.type5);
+                            callback(null);
+                        });
+                    });
+                }
+
+                async.series(tasks, function(error, results) {
+                    if (error) {
+                        node.error(error);
+                    } else {
+                        node.send(msg);
+                    }
+                });
             }
         });
 

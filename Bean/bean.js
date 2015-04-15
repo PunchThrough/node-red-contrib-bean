@@ -174,6 +174,36 @@ module.exports = function(RED) {
             })
         };
 
+        this.readOne = function(done) {
+            _performFunctionWhenConnected(function() {
+                this.device.readOne(done);
+            });
+        };
+
+        this.readTwo = function(done) {
+            _performFunctionWhenConnected(function() {
+                this.device.readTwo(done);
+            });
+        };
+
+        this.readThree = function(done) {
+            _performFunctionWhenConnected(function() {
+                this.device.readThree(done);
+            });
+        };
+
+        this.readFour = function(done) {
+            _performFunctionWhenConnected(function() {
+                this.device.readFour(done);
+            });
+        };
+
+        this.readFive = function(done) {
+            _performFunctionWhenConnected(function() {
+                this.device.readFive(done);
+            });
+        };
+
         // This function will immediately execute "aFunction" if the Bean is connected 
         // If the Bean is not connected, "aFunction" will be queued up an executed on next connection
         var _performFunctionWhenConnected = function(aFunction){
