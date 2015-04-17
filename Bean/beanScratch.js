@@ -110,7 +110,7 @@ module.exports = function(RED) {
         var valueOf = function(data, type) {
             if (data && data.length >= 2) {
                 if (type == 'buffer') {
-                    return data;
+                    return new Buffer(data);
                 } else if (type == 'number') {
                     return data.readUInt32LE(0);
                 } else {
