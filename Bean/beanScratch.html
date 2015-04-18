@@ -1,0 +1,217 @@
+<!--
+The MIT License (MIT)
+
+Copyright (c) 2015 Geoffrey Arnold
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+-->
+
+<script type="text/x-red" data-template-name="read scratch">
+    <div class="form-row">
+        <label for="node-input-bean"><i class="fa fa-cog"></i> Bean</label>
+        <input type="text" id="node-input-bean">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name">
+    </div>
+    <div class="form-row">
+        <input type="checkbox" id="node-input-scratch1" style="display: inline-block; width: auto; vertical-align: middle;">
+        <label for="node-input-scratch1">Scratch 1</label>
+        msg.<input type="text" id="node-input-property1" placeholder="scratch1" style="display: inline-block; width: auto; vertical-align: middle;">
+        <select id="node-input-type1" style="display: inline-block; width: auto; vertical-align: middle;">
+            <option value="string">String</option>
+            <option value="number">Number</option>
+            <option value="buffer">Buffer</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <input type="checkbox" id="node-input-scratch2" style="display: inline-block; width: auto; vertical-align: middle;">
+        <label for="node-input-scratch2">Scratch 2</label>
+        msg.<input type="text" id="node-input-property2" placeholder="scratch2" style="display: inline-block; width: auto; vertical-align: middle;">
+        <select id="node-input-type2" style="display: inline-block; width: auto; vertical-align: middle;">
+            <option value="string">String</option>
+            <option value="number">Number</option>
+            <option value="buffer">Buffer</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <input type="checkbox" id="node-input-scratch3" style="display: inline-block; width: auto; vertical-align: middle;">
+        <label for="node-input-scratch3">Scratch 3</label>
+        msg.<input type="text" id="node-input-property3" placeholder="scratch3" style="display: inline-block; width: auto; vertical-align: middle;">
+        <select id="node-input-type3" style="display: inline-block; width: auto; vertical-align: middle;">
+            <option value="string">String</option>
+            <option value="number">Number</option>
+            <option value="buffer">Buffer</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <input type="checkbox" id="node-input-scratch4" style="display: inline-block; width: auto; vertical-align: middle;">
+        <label for="node-input-scratch4">Scratch 4</label>
+        msg.<input type="text" id="node-input-property4" placeholder="scratch4" style="display: inline-block; width: auto; vertical-align: middle;">
+        <select id="node-input-type4" style="display: inline-block; width: auto; vertical-align: middle;">
+            <option value="string">String</option>
+            <option value="number">Number</option>
+            <option value="buffer">Buffer</option>
+        </select>
+    </div>
+    <div class="form-row">
+        <input type="checkbox" id="node-input-scratch5" style="display: inline-block; width: auto; vertical-align: middle;">
+        <label for="node-input-scratch5">Scratch 5</label>
+        msg.<input type="text" id="node-input-property5" placeholder="scratch5" style="display: inline-block; width: auto; vertical-align: middle;">
+        <select id="node-input-type5" style="display: inline-block; width: auto; vertical-align: middle;">
+            <option value="string">String</option>
+            <option value="number">Number</option>
+            <option value="buffer">Buffer</option>
+        </select>
+    </div>
+</script>
+
+<script type="text/x-red" data-template-name="write scratch">
+    <div class="form-row">
+        <label for="node-input-bean"><i class="fa fa-cog"></i> Bean</label>
+        <input type="text" id="node-input-bean">
+    </div>
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> Name</label>
+        <input type="text" id="node-input-name">
+    </div>
+    <div class="form-row">
+        <label for="node-input-writeMethod"><i class="fa fa-random"></i> to</label>
+        <select id="node-input-writeMethod" style="display: inline-block; width: auto; vertical-align: middle;">
+            <option value="writeOne">Scratch 1</option>
+            <option value="writeTwo">Scratch 2</option>
+            <option value="writeThree">Scratch 3</option>
+            <option value="writeFour">Scratch 4</option>
+            <option value="writeFive">Scratch 5</option>
+        </select>
+    </div>
+</script>
+
+<script type="text/x-red" data-help-name="read scratch">
+    <p>A Node-RED node to read <a href="http://punchthrough.com/bean/arduino-users-guide/#scratch_characteristics" target="_blank">scratch characteristics</a> from a <a href="https://punchthrough.com/bean/" target="_blank">LightBlue Bean</a>.</p>
+    <p>Sending any message to this node will trigger a request to read a Bean's scratch characteristics.  By default, the values of all 5 scratch characteristics will be converted to strings and added to <code>msg.scratch[1-5]</code>.</p>
+    <p>You can configure which characteristics to read, as well as their corresponding <code>msg</code> property names and types, in the node template.</p>
+</script>
+
+<script type="text/x-red" data-help-name="write scratch">
+    <p>A Node-RED node to write <a href="http://punchthrough.com/bean/arduino-users-guide/#scratch_characteristics" target="_blank">scratch characteristics</a> on a <a href="https://punchthrough.com/bean/" target="_blank">LightBlue Bean</a>.</p>
+    <p>This node can be connected to the output of any node, and will write <code>msg.payload</code> to the selected scratch characteristic.  <code>msg.payload</code> can be a <code>Buffer</code>, <code>Number</code>, or <code>String</code>.  By default, the value will be written to scratch characteristic #1.</p>
+</script>
+
+<script type="text/javascript">
+    RED.nodes.registerType('read scratch', {
+        category: 'LightBlue Bean',
+        color: '#3FADB5',
+        defaults: {
+            bean: {
+                value: '',
+                required: true,
+                type: 'bean'
+            },
+            name: {
+                value: ''
+            },
+            scratch1: {
+                value: true
+            },
+            property1: {
+                value: ''
+            },
+            type1: {
+                value: ''
+            },
+            scratch2: {
+                value: true
+            },
+            property2: {
+                value: ''
+            },
+            type2: {
+                value: ''
+            },
+            scratch3: {
+                value: true
+            },
+            property3: {
+                value: ''
+            },
+            type3: {
+                value: ''
+            },
+            scratch4: {
+                value: true
+            },
+            property4: {
+                value: ''
+            },
+            type4: {
+                value: ''
+            },
+            scratch5: {
+                value: true
+            },
+            property5: {
+                value: ''
+            },
+            type5: {
+                value: ''
+            }
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: 'scratch.png',
+        label: function() {
+            var bean = RED.nodes.node(this.bean);
+            return this.name || ((bean ? bean.label() : 'Bean') + ' read scratch');
+        },
+        labelStyle: function() {
+            return this.name ? 'node_label_italic' : '';
+        }
+    });
+
+    RED.nodes.registerType('write scratch', {
+        category: 'LightBlue Bean',
+        color: '#3FADB5',
+        defaults: {
+            bean: {
+                value: '',
+                required: true,
+                type: 'bean'
+            },
+            name: {
+                value: ''
+            },
+            writeMethod: {
+                value: ''
+            }
+        },
+        inputs: 1,
+        outputs: 1,
+        icon: 'scratch.png',
+        label: function() {
+            var bean = RED.nodes.node(this.bean);
+            return this.name || ((bean ? bean.label() : 'Bean') + ' write scratch');
+        },
+        labelStyle: function() {
+            return this.name ? 'node_label_italic' : '';
+        },
+        align: 'right'
+    });
+</script>

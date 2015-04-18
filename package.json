@@ -9,7 +9,8 @@
     "url": "https://github.com/PunchThrough/node-red-contrib-bean/issues"
   },
   "dependencies": {
-    "ble-bean": "^2.1.0"
+    "ble-bean": "^2.1.0",
+    "async": "0.9.x"
   },
   "repository": {
     "type": "git",
@@ -25,7 +26,8 @@
   ],
   "contributors": [
     "Ray Kampmeier <raykampmeier@gmail.com> (http://raykampmeier.com/)",
-    "Simone Giertz <simone@giertz.com> (http://simonegiertz.com/)"
+    "Simone Giertz <simone@giertz.com> (http://simonegiertz.com/)",
+    "Geoffrey Arnold <geoffrey@geoffreyarnold.com> (https://github.com/garnold)"
   ],
   "node-red": {
     "nodes": {
@@ -33,7 +35,8 @@
       "beanAccel": "Bean/beanAccel.js",
       "beanLed": "Bean/beanLed.js",
       "beanSerial": "Bean/beanSerial.js",
-      "beanTemp": "Bean/beanTemp.js"
+      "beanTemp": "Bean/beanTemp.js",
+      "beanScratch": "Bean/beanScratch.js"
     }
   }
 }
