@@ -31,23 +31,23 @@ module.exports = function(RED) {
         RED.nodes.createNode(this, n);
         this.bean = RED.nodes.getNode(n.bean);
 
-        this.scratch1 = n.scratch1;
+        this.readOne = n.readOne;
         this.property1 = n.property1 || 'scratch1';
         this.type1 = n.type1 || 'string';
 
-        this.scratch2 = n.scratch2;
+        this.readTwo = n.readTwo;
         this.property2 = n.property2 || 'scratch2';
         this.type2 = n.type2 || 'string';
 
-        this.scratch3 = n.scratch3;
+        this.readThree = n.readThree;
         this.property3 = n.property3 || 'scratch3';
         this.type3 = n.type3 || 'string';
 
-        this.scratch4 = n.scratch4;
+        this.readFour = n.readFour;
         this.property4 = n.property4 || 'scratch4';
         this.type4 = n.type4 || 'string';
 
-        this.scratch5 = n.scratch5;
+        this.readFive = n.readFive;
         this.property5 = n.property5 || 'scratch5';
         this.type5 = n.type5 || 'string';
 
@@ -56,7 +56,7 @@ module.exports = function(RED) {
         this.on('input', function(msg) {
             if (node.bean) {
                 var tasks = [];
-                if (node.scratch1) {
+                if (node.readOne) {
                     tasks.push(function(callback) {
                         node.bean.readOne(function(data) {
                             msg[node.property1] = valueOf(data, node.type1);
@@ -64,7 +64,7 @@ module.exports = function(RED) {
                         });
                     });
                 }
-                if (node.scratch2) {
+                if (node.readTwo) {
                     tasks.push(function(callback) {
                         node.bean.readTwo(function(data) {
                             msg[node.property2] = valueOf(data, node.type2);
@@ -72,7 +72,7 @@ module.exports = function(RED) {
                         });
                     });
                 }
-                if (node.scratch3) {
+                if (node.readThree) {
                     tasks.push(function(callback) {
                         node.bean.readThree(function(data) {
                             msg[node.property3] = valueOf(data, node.type3);
@@ -80,7 +80,7 @@ module.exports = function(RED) {
                         });
                     });
                 }
-                if (node.scratch4) {
+                if (node.readFour) {
                     tasks.push(function(callback) {
                         node.bean.readFour(function(data) {
                             msg[node.property4] = valueOf(data, node.type4);
@@ -88,7 +88,7 @@ module.exports = function(RED) {
                         });
                     });
                 }
-                if (node.scratch5) {
+                if (node.readFive) {
                     tasks.push(function(callback) {
                         node.bean.readFive(function(data) {
                             msg[node.property5] = valueOf(data, node.type5);
@@ -104,6 +104,8 @@ module.exports = function(RED) {
                         node.send(msg);
                     }
                 });
+            } else {
+                node.error('Read scratch node is not configured');
             }
         });
 
@@ -121,8 +123,10 @@ module.exports = function(RED) {
             }
         }
 
-        this.beanConfig = this.bean; // status mixin assumes `beanConfig` property exists
-        beanStatus.configureBeanStatuses.call(this);
+        if (this.bean) {
+            this.beanConfig = this.bean; // status mixin assumes `beanConfig` property exists
+            beanStatus.configureBeanStatuses.call(this);
+        }
     }
     RED.nodes.registerType('read scratch', BeanReadScratchNode);
 
@@ -136,7 +140,7 @@ module.exports = function(RED) {
 
         this.on('input', function(msg) {
             if (node.bean) {
-                if (msg.hasOwnProperty(node.msgProperty)) {
+                if (node.msgProperty in msg) {
                     var buffer = bufferize(msg[node.msgProperty]);
                     node.bean[node.writeMethod](buffer, function() {
                         node.send(msg);
