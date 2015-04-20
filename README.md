@@ -39,6 +39,7 @@ Node-Red allows for third party nodes to be made and distributed as npm modules.
 
 ## History
 
+- 0.4.0 : Scratch characteristic nodes
 - 0.3.2 : Timeout mode for serial node
 - 0.3.1 : Option to send basic color names in string form to the LED node. ex: "Red"
 - 0.3.0 : Ability to search for nearby Beans in configuration 
