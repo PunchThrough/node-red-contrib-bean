@@ -32,8 +32,8 @@ THE SOFTWARE.
         <input type="text" id="node-input-name">
     </div>
     <div class="form-row">
-        <input type="checkbox" id="node-input-scratch1" style="display: inline-block; width: auto; vertical-align: middle;">
-        <label for="node-input-scratch1">Scratch 1</label>
+        <input type="checkbox" id="node-input-readOne" style="display: inline-block; width: auto; vertical-align: middle;">
+        <label for="node-input-readOne">Scratch 1</label>
         msg.<input type="text" id="node-input-property1" placeholder="scratch1" style="display: inline-block; width: auto; vertical-align: middle;">
         <select id="node-input-type1" style="display: inline-block; width: auto; vertical-align: middle;">
             <option value="string">String</option>
@@ -42,8 +42,8 @@ THE SOFTWARE.
         </select>
     </div>
     <div class="form-row">
-        <input type="checkbox" id="node-input-scratch2" style="display: inline-block; width: auto; vertical-align: middle;">
-        <label for="node-input-scratch2">Scratch 2</label>
+        <input type="checkbox" id="node-input-readTwo" style="display: inline-block; width: auto; vertical-align: middle;">
+        <label for="node-input-readTwo">Scratch 2</label>
         msg.<input type="text" id="node-input-property2" placeholder="scratch2" style="display: inline-block; width: auto; vertical-align: middle;">
         <select id="node-input-type2" style="display: inline-block; width: auto; vertical-align: middle;">
             <option value="string">String</option>
@@ -52,8 +52,8 @@ THE SOFTWARE.
         </select>
     </div>
     <div class="form-row">
-        <input type="checkbox" id="node-input-scratch3" style="display: inline-block; width: auto; vertical-align: middle;">
-        <label for="node-input-scratch3">Scratch 3</label>
+        <input type="checkbox" id="node-input-readThree" style="display: inline-block; width: auto; vertical-align: middle;">
+        <label for="node-input-readThree">Scratch 3</label>
         msg.<input type="text" id="node-input-property3" placeholder="scratch3" style="display: inline-block; width: auto; vertical-align: middle;">
         <select id="node-input-type3" style="display: inline-block; width: auto; vertical-align: middle;">
             <option value="string">String</option>
@@ -62,8 +62,8 @@ THE SOFTWARE.
         </select>
     </div>
     <div class="form-row">
-        <input type="checkbox" id="node-input-scratch4" style="display: inline-block; width: auto; vertical-align: middle;">
-        <label for="node-input-scratch4">Scratch 4</label>
+        <input type="checkbox" id="node-input-readFour" style="display: inline-block; width: auto; vertical-align: middle;">
+        <label for="node-input-readFour">Scratch 4</label>
         msg.<input type="text" id="node-input-property4" placeholder="scratch4" style="display: inline-block; width: auto; vertical-align: middle;">
         <select id="node-input-type4" style="display: inline-block; width: auto; vertical-align: middle;">
             <option value="string">String</option>
@@ -72,8 +72,8 @@ THE SOFTWARE.
         </select>
     </div>
     <div class="form-row">
-        <input type="checkbox" id="node-input-scratch5" style="display: inline-block; width: auto; vertical-align: middle;">
-        <label for="node-input-scratch5">Scratch 5</label>
+        <input type="checkbox" id="node-input-readFive" style="display: inline-block; width: auto; vertical-align: middle;">
+        <label for="node-input-readFive">Scratch 5</label>
         msg.<input type="text" id="node-input-property5" placeholder="scratch5" style="display: inline-block; width: auto; vertical-align: middle;">
         <select id="node-input-type5" style="display: inline-block; width: auto; vertical-align: middle;">
             <option value="string">String</option>
@@ -93,6 +93,10 @@ THE SOFTWARE.
         <input type="text" id="node-input-name">
     </div>
     <div class="form-row">
+        <label for="node-input-msgProperty"><i class="fa fa-code"></i> Write</label>
+        msg.<input type="text" id="node-input-msgProperty" placeholder="payload" style="display: inline-block; width: auto; vertical-align: middle;">
+    </div>
+    <div class="form-row">
         <label for="node-input-writeMethod"><i class="fa fa-random"></i> to</label>
         <select id="node-input-writeMethod" style="display: inline-block; width: auto; vertical-align: middle;">
             <option value="writeOne">Scratch 1</option>
@@ -106,13 +110,13 @@ THE SOFTWARE.
 
 <script type="text/x-red" data-help-name="read scratch">
     <p>A Node-RED node to read <a href="http://punchthrough.com/bean/arduino-users-guide/#scratch_characteristics" target="_blank">scratch characteristics</a> from a <a href="https://punchthrough.com/bean/" target="_blank">LightBlue Bean</a>.</p>
-    <p>Sending any message to this node will trigger a request to read a Bean's scratch characteristics.  By default, the values of all 5 scratch characteristics will be converted to strings and added to <code>msg.scratch[1-5]</code>.</p>
+    <p>Sending any message to this node will trigger a request to read a Bean's scratch characteristics.  By default, the value of scratch characteristic 1 will be converted to a <code>String</code> and set as property <code>msg.payload</code>.</p>
     <p>You can configure which characteristics to read, as well as their corresponding <code>msg</code> property names and types, in the node template.</p>
 </script>
 
 <script type="text/x-red" data-help-name="write scratch">
     <p>A Node-RED node to write <a href="http://punchthrough.com/bean/arduino-users-guide/#scratch_characteristics" target="_blank">scratch characteristics</a> on a <a href="https://punchthrough.com/bean/" target="_blank">LightBlue Bean</a>.</p>
-    <p>This node can be connected to the output of any node, and will write <code>msg.payload</code> to the selected scratch characteristic.  <code>msg.payload</code> can be a <code>Buffer</code>, <code>Number</code>, or <code>String</code>.  By default, the value will be written to scratch characteristic #1.</p>
+    <p>This node can be connected to the output of any node, and will write the specified <code>msg</code> property to the selected scratch characteristic.  The <code>msg</code> property can be a <code>Buffer</code>, <code>Number</code>, or <code>String</code>.  By default, the value of <code>msg.payload</code> will be written to scratch characteristic 1.</p>
 </script>
 
 <script type="text/javascript">
@@ -128,17 +132,17 @@ THE SOFTWARE.
             name: {
                 value: ''
             },
-            scratch1: {
+            readOne: {
                 value: true
             },
             property1: {
-                value: ''
+                value: 'payload'
             },
             type1: {
-                value: ''
+                value: 'string'
             },
-            scratch2: {
-                value: true
+            readTwo: {
+                value: false
             },
             property2: {
                 value: ''
@@ -146,8 +150,8 @@ THE SOFTWARE.
             type2: {
                 value: ''
             },
-            scratch3: {
-                value: true
+            readThree: {
+                value: false
             },
             property3: {
                 value: ''
@@ -155,8 +159,8 @@ THE SOFTWARE.
             type3: {
                 value: ''
             },
-            scratch4: {
-                value: true
+            readFour: {
+                value: false
             },
             property4: {
                 value: ''
@@ -164,8 +168,8 @@ THE SOFTWARE.
             type4: {
                 value: ''
             },
-            scratch5: {
-                value: true
+            readFive: {
+                value: false
             },
             property5: {
                 value: ''
@@ -198,8 +202,11 @@ THE SOFTWARE.
             name: {
                 value: ''
             },
+            msgProperty: {
+                value: 'payload'
+            },
             writeMethod: {
-                value: ''
+                value: 'writeOne'
             }
         },
         inputs: 1,
