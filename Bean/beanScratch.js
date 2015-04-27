@@ -128,7 +128,7 @@ module.exports = function(RED) {
             beanStatus.configureBeanStatuses.call(this);
         }
     }
-    RED.nodes.registerType('read scratch', BeanReadScratchNode);
+    RED.nodes.registerType('scratch in', BeanReadScratchNode);
 
     function BeanWriteScratchNode(n) {
         RED.nodes.createNode(this, n);
@@ -176,5 +176,5 @@ module.exports = function(RED) {
             beanStatus.configureBeanStatuses.call(this);
         }
     }
-    RED.nodes.registerType('write scratch', BeanWriteScratchNode);
+    RED.nodes.registerType('scratch out', BeanWriteScratchNode);
 }

@@ -22,7 +22,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 -->
 
-<script type="text/x-red" data-template-name="read scratch">
+<script type="text/x-red" data-template-name="scratch in">
     <div class="form-row">
         <label for="node-input-bean"><i class="fa fa-cog"></i> Bean</label>
         <input type="text" id="node-input-bean">
@@ -83,7 +83,7 @@ THE SOFTWARE.
     </div>
 </script>
 
-<script type="text/x-red" data-template-name="write scratch">
+<script type="text/x-red" data-template-name="scratch out">
     <div class="form-row">
         <label for="node-input-bean"><i class="fa fa-cog"></i> Bean</label>
         <input type="text" id="node-input-bean">
@@ -108,19 +108,19 @@ THE SOFTWARE.
     </div>
 </script>
 
-<script type="text/x-red" data-help-name="read scratch">
+<script type="text/x-red" data-help-name="scratch in">
     <p>A Node-RED node to read <a href="http://punchthrough.com/bean/arduino-users-guide/#scratch_characteristics" target="_blank">scratch characteristics</a> from a <a href="https://punchthrough.com/bean/" target="_blank">LightBlue Bean</a>.</p>
     <p>Sending any message to this node will trigger a request to read a Bean's scratch characteristics.  By default, the value of scratch characteristic 1 will be converted to a <code>String</code> and set as property <code>msg.payload</code>.</p>
     <p>You can configure which characteristics to read, as well as their corresponding <code>msg</code> property names and types, in the node template.</p>
 </script>
 
-<script type="text/x-red" data-help-name="write scratch">
+<script type="text/x-red" data-help-name="scratch out">
     <p>A Node-RED node to write <a href="http://punchthrough.com/bean/arduino-users-guide/#scratch_characteristics" target="_blank">scratch characteristics</a> on a <a href="https://punchthrough.com/bean/" target="_blank">LightBlue Bean</a>.</p>
     <p>This node can be connected to the output of any node, and will write the specified <code>msg</code> property to the selected scratch characteristic.  The <code>msg</code> property can be a <code>Buffer</code>, <code>Number</code>, or <code>String</code>.  By default, the value of <code>msg.payload</code> will be written to scratch characteristic 1.</p>
 </script>
 
 <script type="text/javascript">
-    RED.nodes.registerType('read scratch', {
+    RED.nodes.registerType('scratch in', {
         category: 'LightBlue Bean-input',
         color: '#3FADB5',
         defaults: {
@@ -183,14 +183,14 @@ THE SOFTWARE.
         icon: 'scratch.png',
         label: function() {
             var bean = RED.nodes.node(this.bean);
-            return this.name || ((bean ? bean.label() : 'Bean') + ' read scratch');
+            return this.name || ((bean ? bean.label() : 'Bean') + ' scratch');
         },
         labelStyle: function() {
             return this.name ? 'node_label_italic' : '';
         }
     });
 
-    RED.nodes.registerType('write scratch', {
+    RED.nodes.registerType('scratch out', {
         category: 'LightBlue Bean-output',
         color: '#3FADB5',
         defaults: {
@@ -214,7 +214,7 @@ THE SOFTWARE.
         icon: 'scratch.png',
         label: function() {
             var bean = RED.nodes.node(this.bean);
-            return this.name || ((bean ? bean.label() : 'Bean') + ' write scratch');
+            return this.name || ((bean ? bean.label() : 'Bean') + ' scratch');
         },
         labelStyle: function() {
             return this.name ? 'node_label_italic' : '';
