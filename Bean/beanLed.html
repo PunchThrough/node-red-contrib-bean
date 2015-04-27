@@ -40,7 +40,7 @@
 
 <script type="text/javascript">
     RED.nodes.registerType('bean led',{
-        category: 'LightBlue Bean',      // the palette category
+        category: 'LightBlue Bean-output',      // the palette category
         defaults: {             // defines the editable properties of the node
             name: {name:""},
             bean: {type:"bean",required:true}   //  along with default values.
@@ -56,6 +56,7 @@
         },
         labelStyle: function() { // sets the class to apply to the label
             return this.name?"node_label_italic":"";
-        }
+        },
+        align: 'right'
     });
 </script>

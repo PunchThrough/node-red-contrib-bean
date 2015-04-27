@@ -121,7 +121,7 @@ THE SOFTWARE.
 
 <script type="text/javascript">
     RED.nodes.registerType('read scratch', {
-        category: 'LightBlue Bean',
+        category: 'LightBlue Bean-input',
         color: '#3FADB5',
         defaults: {
             bean: {
@@ -191,7 +191,7 @@ THE SOFTWARE.
     });
 
     RED.nodes.registerType('write scratch', {
-        category: 'LightBlue Bean',
+        category: 'LightBlue Bean-output',
         color: '#3FADB5',
         defaults: {
             bean: {
@@ -210,7 +210,7 @@ THE SOFTWARE.
             }
         },
         inputs: 1,
-        outputs: 1,
+        outputs: 0,
         icon: 'scratch.png',
         label: function() {
             var bean = RED.nodes.node(this.bean);
