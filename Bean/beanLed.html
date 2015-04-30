@@ -50,6 +50,7 @@
         color: "#3FADB5",
         // set the icon (held in icons dir below where you save the node)
         icon: "light.png",     // saved in  icons/myicon.png
+        paletteLabel: "rgb led",
         label: function() {     // sets the default label contents
             var beanNode = RED.nodes.node(this.bean);
             return this.name||((beanNode?beanNode.label():"Bean") + " LED");

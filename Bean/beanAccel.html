@@ -45,6 +45,7 @@
         color: "#3FADB5",
         // set the icon (held in icons dir below where you save the node)
         icon: "accel.png",     // saved in  icons/myicon.png
+        paletteLabel: "acceleration",
         label: function() {     // sets the default label contents
             var beanNode = RED.nodes.node(this.bean);
             return this.name||((beanNode?beanNode.label():"Bean") + " accel");

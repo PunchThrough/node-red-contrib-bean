@@ -110,7 +110,7 @@ THE SOFTWARE.
 
 <script type="text/x-red" data-help-name="read scratch">
     <p>A Node-RED node to read <a href="http://punchthrough.com/bean/arduino-users-guide/#scratch_characteristics" target="_blank">scratch characteristics</a> from a <a href="https://punchthrough.com/bean/" target="_blank">LightBlue Bean</a>.</p>
-    <p>Sending any message to this node will trigger a request to read a Bean's scratch characteristics.  By default, the value of scratch characteristic 1 will be converted to a <code>String</code> and set as property <code>msg.payload</code>.</p>
+    <p>Sending any message to this node will trigger a request to read a Bean&#39;s scratch characteristics.  By default, the value of scratch characteristic 1 will be converted to a <code>String</code> and set as property <code>msg.payload</code>.</p>
     <p>You can configure which characteristics to read, as well as their corresponding <code>msg</code> property names and types, in the node template.</p>
 </script>
 
@@ -181,6 +181,7 @@ THE SOFTWARE.
         inputs: 1,
         outputs: 1,
         icon: 'scratch.png',
+        paletteLabel: "read scratch",
         label: function() {
             var bean = RED.nodes.node(this.bean);
             return this.name || ((bean ? bean.label() : 'Bean') + ' read scratch');
@@ -212,6 +213,7 @@ THE SOFTWARE.
         inputs: 1,
         outputs: 0,
         icon: 'scratch.png',
+        paletteLabel: "write scratch",
         label: function() {
             var bean = RED.nodes.node(this.bean);
             return this.name || ((bean ? bean.label() : 'Bean') + ' write scratch');
