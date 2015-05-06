@@ -57,9 +57,12 @@ module.exports = function(RED) {
         this._disconnectTimer;
 
         this._isAttemptingConnection = false;
+        this._isConnectedAndSetUp = false;
 
         // Called after a Bean has been disconnected
         var _hasDisconnected = function (){
+            this._isConnectedAndSetUp = false;
+
             verboseLog("We disconnected from the Bean with name \"" + this.name + "\"");
             this.emit("disconnected");
             if(this.connectiontype == 'constant' &&
@@ -70,6 +73,8 @@ module.exports = function(RED) {
 
         // Called after a Bean has successfully connected
         var _hasConnected = function (){
+            this._isConnectedAndSetUp = true;
+
             verboseLog("We connected to the Bean with name \"" + this.name + "\"");
             this.emit("connected");
 
@@ -119,7 +124,9 @@ module.exports = function(RED) {
         // Used to check if this node is currently conencted to a Bean
         this._isConnected = function (){
             if(this.device
-                && this.device._peripheral.state == 'connected'){
+                && this._isConnectedAndSetUp === true
+                && this.device._peripheral.state == 'connected'
+                && ((this.device.connectAndSetUp) ? this.device.connectAndSetUp === true : true)){
                 return true;
             }else{
                 return false;
