@@ -39,6 +39,7 @@ Node-Red allows for third party nodes to be made and distributed as npm modules.
 
 ## History
 
+- 0.4.2 : Bug fix for a crash caused by node interaction during "connecting" state 
 - 0.4.1 : Aesthetic changes to node appearance 
 - 0.4.0 : Scratch characteristic nodes
 - 0.3.2 : Timeout mode for serial node
