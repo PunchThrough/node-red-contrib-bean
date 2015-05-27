@@ -36,7 +36,7 @@ module.exports = function(RED) {
         events.EventEmitter.call(this);
         verboseLog("A Bean config node is being instantiated");
 
-        beanScanner.startScanning();
+        //beanScanner.startScanning();
 
         // Unlimited listeners
         this.setMaxListeners(0);
@@ -278,6 +278,9 @@ module.exports = function(RED) {
             this.isBeingDestroyed = true;
             clearInterval(this.reconnectInterval);
             beanScanner.stopScanning();
+            // This is a hack. It clears all scan requests for noble-device. 
+            // If every other bean config node isn't also being reset now, then we have issues
+            bleBean.emitter.removeAllListeners('discover');  
             if (this._isConnected()) {
                 this.device.disconnect(function(){
                     verboseLog("A Bean config node is finished being destroyed");
