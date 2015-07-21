@@ -9,7 +9,7 @@
     "url": "https://github.com/PunchThrough/node-red-contrib-bean/issues"
   },
   "dependencies": {
-    "ble-bean": "^2.1.0",
+    "ble-bean": "git://github.com/PunchThrough/ble-bean",
     "async": "0.9.x"
   },
   "repository": {
@@ -28,6 +28,7 @@
     "Ray Kampmeier <raykampmeier@gmail.com> (http://raykampmeier.com/)",
     "Simone Giertz <simone@giertz.com> (http://simonegiertz.com/)",
     "Geoffrey Arnold <geoffrey@geoffreyarnold.com> (https://github.com/garnold)"
+    "Ashish Derhgawen <ashish.derhgawen@gmail.com> (http://ahsishrd.blogspot.com)"
   ],
   "node-red": {
     "nodes": {
