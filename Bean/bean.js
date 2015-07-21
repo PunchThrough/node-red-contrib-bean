@@ -21,8 +21,6 @@ module.exports = function(RED) {
   var bleBean = require("ble-bean");
   var events = require('events');
   var beanScanner = require('./beanScanner.js');
-  var timeout = false;
-
 
   // The main node definition - most things happen in here
   function BeanNode(n) {
