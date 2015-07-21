@@ -40,7 +40,7 @@ module.exports = function(RED) {
     //beanScanner.startScanning();
 
     // Timer to handle timeout errors (such as LMP response timeout error)
-    this.timeoutTimer;
+    this._timeoutTimer;
 
     // Unlimited listeners
     this.setMaxListeners(0);
@@ -114,7 +114,7 @@ module.exports = function(RED) {
           this.emit("connecting");
 
           // If connection attempt takes longer than 10s, cancel connection attempt
-          this.timeoutTimer = setTimeout(function(){
+          this._timeoutTimer = setTimeout(function(){
             verboseLog("Timeout occured");
             this._isAttemptingConnection = false;
             setImmediate(function(){_hasDisconnected();});
@@ -125,9 +125,9 @@ module.exports = function(RED) {
             if (this._isAttemptingConnection)
             {
               this.device.once('disconnect', _hasDisconnected);
-              if (typeof(this.timeoutTimer) !== 'undefined'
-              && this.timeoutTimer !== null){
-                clearTimeout(this.timeoutTimer);
+              if (typeof(this._timeoutTimer) !== 'undefined'
+              && this._timeoutTimer !== null){
+                clearTimeout(this._timeoutTimer);
                 //verboseLog("Timeout timer cleared");
               }
               this._isAttemptingConnection = false;
