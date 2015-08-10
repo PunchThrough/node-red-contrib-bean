@@ -85,19 +85,19 @@ module.exports = function(RED) {
             this.device.send(new Buffer([0x05, 0x50]), new Buffer([]), function(){});
 
             _setDisconnectionTimeout(this.connectiontimeout);
-
+            
             while (this._funqueue.length > 0) {
-                (this._funqueue.shift()).call(this);
+                (this._funqueue.shift()).call(this);   
             }
         }.bind(this)
 
 
-        // This function will attempt to connect to a Bean.
+        // This function will attempt to connect to a Bean. 
         var _attemptConnection = function(){
             if(this._isAttemptingConnection === true ||
-                this.isBeingDestroyed === true){
+                this.isBeingDestroyed === true){ 
                 verboseLog("Already in a connection attempt to the Bean with name \"" + this.name + "\"");
-                return false;
+                return false; 
             }
 
             verboseLog("Scanning for the Bean with name \"" + this.name + "\"");
@@ -162,7 +162,7 @@ module.exports = function(RED) {
         var _setDisconnectionTimeout = function(seconds){
             if(this.connectiontype == 'timeout'){
                 // Clear any previous disconnect timeout
-                if (typeof(this._disconnectTimer) === 'undefined'
+                if (typeof(this._disconnectTimer) === 'undefined' 
                     || this._disconnectTimer === null)
                 {
 
@@ -265,7 +265,7 @@ module.exports = function(RED) {
             });
         };
 
-        // This function will immediately execute "aFunction" if the Bean is connected
+        // This function will immediately execute "aFunction" if the Bean is connected 
         // If the Bean is not connected, "aFunction" will be queued up an executed on next connection
         var _performFunctionWhenConnected = function(aFunction){
             if(this._isConnected() === true){
@@ -276,11 +276,11 @@ module.exports = function(RED) {
                 this._funqueue.push(aFunction);
             }
         }.bind(this)
+        
 
-
-        // This is a second precaution in case the "disconnect" event isn't reached
+        // This is a second precaution in case the "disconnect" event isn't reached 
         if(this.connectiontype === 'constant'){
-            // Queue up a call to attempt initial connection.
+            // Queue up a call to attempt initial connection. 
             // This lets the Bean nodes that depend on this configuration get setup before connction is attempted
             setImmediate(function(){
                 _attemptConnection();
@@ -302,9 +302,9 @@ module.exports = function(RED) {
             this.isBeingDestroyed = true;
             clearInterval(this.reconnectInterval);
             beanScanner.stopScanning();
-            // This is a hack. It clears all scan requests for noble-device.
+            // This is a hack. It clears all scan requests for noble-device. 
             // If every other bean config node isn't also being reset now, then we have issues
-            bleBean.emitter.removeAllListeners('discover');
+            bleBean.emitter.removeAllListeners('discover');  
             if (this._isConnected()) {
                 this.device.disconnect(function(){
                     verboseLog("A Bean config node is finished being destroyed");
