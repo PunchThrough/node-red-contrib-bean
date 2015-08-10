@@ -16,7 +16,7 @@ Node-Red allows for third party nodes to be made and distributed as npm modules.
 1. Install Node-RED: `sudo npm install -g node-red`
 1. Install Bean nodes
     1. `mkdir -p ~/.node-red/node_modules`
-    1. `npm install --prefix ~/.node-red node-red-contrib-bean` 
+    1. `npm install --prefix ~/.node-red node-red-contrib-bean`
 
 ## Usage
 
@@ -39,13 +39,13 @@ Node-Red allows for third party nodes to be made and distributed as npm modules.
 
 ## History
 
-- 0.4.3 : Temporary fix to prevent bean nodes from hanging at "searching...". This will be resolved once ble-bean dependancy is updated to use the latest nobleDevice dependancy. 
-- 0.4.2 : Bug fix for a crash caused by node interaction during "connecting" state 
-- 0.4.1 : Aesthetic changes to node appearance 
+- 0.4.3 : Temporary fix to prevent bean nodes from hanging at "searching...". This will be resolved once ble-bean dependancy is updated to use the latest nobleDevice dependancy.
+- 0.4.2 : Bug fix for a crash caused by node interaction during "connecting" state
+- 0.4.1 : Aesthetic changes to node appearance
 - 0.4.0 : Scratch characteristic nodes
 - 0.3.2 : Timeout mode for serial node
 - 0.3.1 : Option to send basic color names in string form to the LED node. ex: "Red"
-- 0.3.0 : Ability to search for nearby Beans in configuration 
+- 0.3.0 : Ability to search for nearby Beans in configuration
 - 0.2.0 : Better logging and reporting of errors, more accurate Bean connection timeout
 - 0.1.0 : More robust connection routines, fixed some crashes during deployment, better how-to-use text
 - 0.0.1 : Initial Release
@@ -55,10 +55,11 @@ Node-Red allows for third party nodes to be made and distributed as npm modules.
 * Ray Kampmeier [@raykamp](https://github.com/raykamp)
 * Simone Giertz [@simsalapim](https://github.com/simsalapim)
 * Geoffrey Arnold [@garnold](https://github.com/garnold)
+* Ashish Derhgawen [@aderhgawen](https://github.com/aderhgawen)
 
 ## Credits
 
-Node-RED has been made possible by the hard work of Nick O'Leary @knolleary and Dave Conway-Jones @ceejay at IBM Emerging Technology. Much thanks to them and other supporters for advancing this platform. 
+Node-RED has been made possible by the hard work of Nick O'Leary @knolleary and Dave Conway-Jones @ceejay at IBM Emerging Technology. Much thanks to them and other supporters for advancing this platform.
 
 ## License
 
