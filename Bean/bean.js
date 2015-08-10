@@ -41,6 +41,9 @@ module.exports = function(RED) {
         // Unlimited listeners
         this.setMaxListeners(0);
 
+        // Timer to handle timeout errors (such as LMP response timeout error)
+        this._timeoutTimer;
+
         // Store local copies of the node configuration (as defined in the .html)
         this.name = n.name;
         this.uuid = n.uuid;
@@ -93,7 +96,7 @@ module.exports = function(RED) {
         var _attemptConnection = function(){
             if(this._isAttemptingConnection === true ||
                 this.isBeingDestroyed === true){ 
-                //verboseLog("Already in a connection attempt to the Bean with name \"" + this.name + "\"");
+                verboseLog("Already in a connection attempt to the Bean with name \"" + this.name + "\"");
                 return false; 
             }
 
@@ -107,10 +110,31 @@ module.exports = function(RED) {
                 verboseLog("We found a desired Bean \"" + this.name + "\"");
                 this.device = bean;
                 this.emit("connecting");
-                this.device.connectAndSetup(function(){
-                    this.device.once('disconnect', _hasDisconnected);
+
+                // If connection attempt takes longer than 10s, cancel connection attempt
+                this._timeoutTimer = setTimeout(function(){
+                    verboseLog("Timeout occured");
                     this._isAttemptingConnection = false;
-                    _hasConnected();
+                    setImmediate(function(){_hasDisconnected();});
+                }.bind(this), 10*1000);
+
+                this.device.connectAndSetup(function(){
+                    // Only connect if connection timer has not triggered
+                    if (this._isAttemptingConnection)
+                    {
+                        this.device.once('disconnect', _hasDisconnected);
+                        if (typeof(this._timeoutTimer) !== 'undefined'
+                        && this._timeoutTimer !== null){
+                          clearTimeout(this._timeoutTimer);
+                          //verboseLog("Timeout timer cleared");
+                        }
+                        this._isAttemptingConnection = false;
+                        _hasConnected();
+                    }
+                    else
+                    {
+                        this.device.disconnect();
+                    }
                 }.bind(this))
             }.bind(this)
 
@@ -126,7 +150,7 @@ module.exports = function(RED) {
             if(this.device
                 && this._isConnectedAndSetUp === true
                 && this.device._peripheral.state == 'connected'
-                && ((this.device.connectAndSetUp) ? this.device.connectAndSetUp === true : true)){
+                && ((this.device.connectedAndSetUp) ? this.device.connectedAndSetUp === true : true)){
                 return true;
             }else{
                 return false;
