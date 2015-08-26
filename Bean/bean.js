@@ -126,7 +126,7 @@ module.exports = function(RED) {
             if(this.device
                 && this._isConnectedAndSetUp === true
                 && this.device._peripheral.state == 'connected'
-                && ((this.device.connectAndSetUp) ? this.device.connectAndSetUp === true : true)){
+                && ((this.device.connectedAndSetUp) ? this.device.connectedAndSetUp === true : true)){
                 return true;
             }else{
                 return false;
