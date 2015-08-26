@@ -8,9 +8,9 @@ Node-Red allows for third party nodes to be made and distributed as npm modules.
 
 ## Installation
 
-1. Install version 0.10.x of Node.js (Note: 0.12.0 is not yet supported by Node-RED)
-    - Linux Binaries: [32-bit](http://nodejs.org/dist/v0.10.36/node-v0.10.36-linux-x86.tar.gz) or [64-bit](http://nodejs.org/dist/v0.10.36/node-v0.10.36-linux-x64.tar.gz)
-    - Max OS X Installer: [Universal](http://nodejs.org/dist/v0.10.36/node-v0.10.36.pkg)
+1. Install Node.js
+    - Linux Binaries: [32-bit](https://nodejs.org/dist/v0.12.7/node-v0.12.7-linux-x86.tar.gz) or [64-bit](https://nodejs.org/dist/v0.12.7/node-v0.12.7-linux-x64.tar.gz)
+    - Max OS X Installer: [Universal](https://nodejs.org/dist/v0.12.7/node-v0.12.7.pkg)
     - [Raspberry Pi](http://nodered.org/docs/hardware/raspberrypi.html)
     - [BeagleBone Black](http://nodered.org/docs/hardware/beagleboneblack.html)
 1. Install Node-RED: `sudo npm install -g node-red`
