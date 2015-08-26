@@ -1,7 +1,7 @@
 {
   "name": "node-red-contrib-bean",
   "author": "Ray Kampmeier - Punch Through Design",
-  "version": "0.4.4",
+  "version": "0.5.0",
   "description": "Node-red node for the LightBlue Bean",
   "license": "MIT",
   "homepage": "https://punchthrough.com/bean/",
@@ -9,7 +9,7 @@
     "url": "https://github.com/PunchThrough/node-red-contrib-bean/issues"
   },
   "dependencies": {
-    "ble-bean": "^2.1.0",
+    "ble-bean": "git://github.com/PunchThrough/ble-bean",
     "async": "0.9.x"
   },
   "repository": {
