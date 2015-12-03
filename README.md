@@ -39,6 +39,8 @@ Node-Red allows for third party nodes to be made and distributed as npm modules.
 
 ## History
 
+- 0.5.1 : Fix Read scratch node
+- 0.5.0 : Update README links and package.json
 - 0.4.4 : Typo fix that was affecting latest versions of noble
 - 0.4.3 : Temporary fix to prevent bean nodes from hanging at "searching...". This will be resolved once ble-bean dependancy is updated to use the latest nobleDevice dependancy. 
 - 0.4.2 : Bug fix for a crash caused by node interaction during "connecting" state 
