@@ -59,7 +59,11 @@ module.exports = function(RED) {
                 if (node.readOne) {
                     tasks.push(function(callback) {
                         node.bean.readOne(function(error, data) {
-                            msg[node.property1] = valueOf(data, node.type1);
+                            if (error) {
+                                node.error(error);
+                            } else {
+                                msg[node.property1] = valueOf(data, node.type1);
+                            }
                             callback(null);
                         });
                     });
@@ -67,7 +71,11 @@ module.exports = function(RED) {
                 if (node.readTwo) {
                     tasks.push(function(callback) {
                         node.bean.readTwo(function(error, data) {
-                            msg[node.property2] = valueOf(data, node.type2);
+                            if (error) {
+                                node.error(error);
+                            } else {
+                                msg[node.property2] = valueOf(data, node.type2);
+                            }
                             callback(null);
                         });
                     });
@@ -75,7 +83,11 @@ module.exports = function(RED) {
                 if (node.readThree) {
                     tasks.push(function(callback) {
                         node.bean.readThree(function(error, data) {
-                            msg[node.property3] = valueOf(data, node.type3);
+                            if (error) {
+                                node.error(error);
+                            } else {
+                                msg[node.property3] = valueOf(data, node.type3);
+                            }
                             callback(null);
                         });
                     });
@@ -83,7 +95,11 @@ module.exports = function(RED) {
                 if (node.readFour) {
                     tasks.push(function(callback) {
                         node.bean.readFour(function(error, data) {
-                            msg[node.property4] = valueOf(data, node.type4);
+                            if (error) {
+                                node.error(error);
+                            } else {
+                                msg[node.property4] = valueOf(data, node.type4);
+                            }
                             callback(null);
                         });
                     });
@@ -91,7 +107,11 @@ module.exports = function(RED) {
                 if (node.readFive) {
                     tasks.push(function(callback) {
                         node.bean.readFive(function(error, data) {
-                            msg[node.property5] = valueOf(data, node.type5);
+                            if (error) {
+                                node.error(error);
+                            } else {
+                                msg[node.property5] = valueOf(data, node.type5);
+                            }
                             callback(null);
                         });
                     });
