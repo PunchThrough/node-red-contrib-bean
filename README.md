@@ -39,6 +39,7 @@ Node-Red allows for third party nodes to be made and distributed as npm modules.
 
 ## History
 
+- 0.5.2 : Fix Serial node to add the split char on outgoing messages
 - 0.5.1 : Fix Read scratch node
 - 0.5.0 : Update README links and package.json
 - 0.4.4 : Typo fix that was affecting latest versions of noble
@@ -59,6 +60,7 @@ Node-Red allows for third party nodes to be made and distributed as npm modules.
 * Simone Giertz [@simsalapim](https://github.com/simsalapim)
 * Geoffrey Arnold [@garnold](https://github.com/garnold)
 * Ashish Derhgawen [@aderhgawen](http://github.com/aderhgawen)
+* Stephen Stack [@swstack](https://github.com/swstack)
 
 ## Credits
 
