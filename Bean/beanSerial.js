@@ -51,7 +51,15 @@ module.exports = function(RED) {
         this.on('input', function (msg) {
             if(this.beanConfig){
                 // This works for both String and Buffer objects. Strings are expected to be utf8 encoded
-                this.beanConfig.write(new Buffer(msg.payload), function(){
+                var outBuf = new Buffer(msg.payload)
+
+                // Check to see if we should add the split char
+                if (this.addchar) {
+                    outBuf = Buffer.concat([outBuf, new Buffer([this.splitChar])])
+                }
+
+                this.beanConfig.write(outBuf, function(error){
+                    if (error) this.error(error)
                 })
             }
         });
